@@ -1,12 +1,18 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { authService } from '../services/api';
 import '../styles/Navbar.css';
 
 const Navbar = () => {
   const { user, logout, isAuthenticated, isOwner } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      await authService.logout();
+    } catch (err) {
+      // ignore logout errors, still clear client state
+    }
     logout();
     navigate('/login');
   };

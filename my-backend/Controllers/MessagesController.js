@@ -1,6 +1,5 @@
 ﻿import Message from "../Models/Messages.js";
 import Booking from "../Models/Bookings.js";
-import Hotel from "../Models/Hotels.js";
 
 export const getMessagesByBooking = async (req, res) => {
   try {
