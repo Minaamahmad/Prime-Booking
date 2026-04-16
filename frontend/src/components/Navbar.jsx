@@ -24,9 +24,14 @@ const Navbar = () => {
           </Link>
 
           {isAuthenticated() && isOwner() && (
-            <Link to="/owner-dashboard" className="nav-link">
-              Dashboard
-            </Link>
+            <>
+              <Link to="/owner-dashboard" className="nav-link">
+                Dashboard
+              </Link>
+              <Link to="/owner-chats" className="nav-link">
+                Owner Chats
+              </Link>
+            </>
           )}
 
           {isAuthenticated() && !isOwner() && (

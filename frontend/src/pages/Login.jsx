@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { authService } from '../services/api';
 import ErrorAlert from '../components/ErrorAlert';
 import '../styles/Login.css';
 
@@ -10,26 +11,22 @@ const Login = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleGoogleLogin = async (response) => {
+  const handleDemoLogin = async (role) => {
     try {
       setLoading(true);
       setError('');
 
-      // In a real app, you'd send the token to your backend
-      // For now, we'll create a mock user object
-      const mockUser = {
-        _id: response.profileObj?.googleId || Math.random().toString(),
-        name: response.profileObj?.name || 'Guest User',
-        email: response.profileObj?.email,
-        avatar: response.profileObj?.imageUrl,
-        role: 'Guest', // Default role
+      const payload = {
+        name: role === 'Owner' ? 'Demo Owner' : 'Demo Guest',
+        email: role === 'Owner' ? 'owner@example.com' : 'guest@example.com',
+        role,
       };
 
-      // Save user and redirect
-      login(mockUser);
+      const response = await authService.demoLogin(payload);
+      login(response.data.user, response.data.token);
       navigate('/');
     } catch (err) {
-      setError(err.message || 'Login failed. Please try again.');
+      setError(err.response?.data?.message || 'Login failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -45,40 +42,24 @@ const Login = () => {
         <ErrorAlert message={error} onClose={() => setError('')} />
 
         <div className="login-options">
-          <button className="google-login-btn" disabled={loading}>
+          <button className="google-login-btn" disabled>
             <span className="google-icon">🔐</span>
-            <span>{loading ? 'Signing in...' : 'Sign in with Google'}</span>
+            <span>Sign in with Google (not configured)</span>
           </button>
 
           <div className="demo-users">
             <p>Demo Users:</p>
             <button
               className="demo-btn guest-btn"
-              onClick={() => {
-                const demoGuest = {
-                  _id: 'demo-guest-123',
-                  name: 'Demo Guest',
-                  email: 'guest@example.com',
-                  role: 'Guest',
-                };
-                login(demoGuest);
-                navigate('/');
-              }}
+              disabled={loading}
+              onClick={() => handleDemoLogin('Guest')}
             >
               Login as Guest
             </button>
             <button
               className="demo-btn owner-btn"
-              onClick={() => {
-                const demoOwner = {
-                  _id: 'demo-owner-456',
-                  name: 'Demo Owner',
-                  email: 'owner@example.com',
-                  role: 'Owner',
-                };
-                login(demoOwner);
-                navigate('/');
-              }}
+              disabled={loading}
+              onClick={() => handleDemoLogin('Owner')}
             >
               Login as Owner
             </button>

@@ -4,12 +4,13 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Initialize user from localStorage
   useEffect(() => {
     const savedUser = localStorage.getItem('user');
+    const savedToken = localStorage.getItem('token');
     if (savedUser) {
       try {
         setUser(JSON.parse(savedUser));
@@ -17,13 +18,18 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem('user');
       }
     }
+    if (savedToken) {
+      setToken(savedToken);
+    }
     setLoading(false);
   }, []);
 
-  const login = useCallback((userData) => {
+  const login = useCallback((userData, authToken) => {
     try {
       setUser(userData);
+      setToken(authToken);
       localStorage.setItem('user', JSON.stringify(userData));
+      localStorage.setItem('token', authToken || '');
       setError(null);
       return userData;
     } catch (err) {
@@ -34,7 +40,9 @@ export const AuthProvider = ({ children }) => {
 
   const logout = useCallback(() => {
     setUser(null);
+    setToken(null);
     localStorage.removeItem('user');
+    localStorage.removeItem('token');
     setError(null);
   }, []);
 
@@ -54,6 +62,7 @@ export const AuthProvider = ({ children }) => {
     <AuthContext.Provider
       value={{
         user,
+        token,
         loading,
         error,
         login,

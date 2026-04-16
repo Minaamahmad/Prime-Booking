@@ -105,21 +105,29 @@
 }
 
 .approve-btn,
-.cancel-btn {
-  flex: 1;
-  padding: 8px 12px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: 500;
-  transition: all 0.3s ease;
-}
+  .cancel-btn,
+  .chat-btn {
+    flex: 1;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
 
-.approve-btn {
-  background-color: var(--success-color);
-  color: white;
-}
+  .approve-btn {
+    background-color: var(--success-color);
+    color: white;
+  }
+  .chat-btn {
+    background-color: #3b82f6;
+    color: white;
+  }
+
+  .chat-btn:hover {
+    background-color: #2563eb;
 
 .approve-btn:hover {
   background-color: #40c057;
@@ -153,3 +161,4 @@
     width: 100%;
   }
 }
+  }

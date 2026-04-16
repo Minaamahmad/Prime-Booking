@@ -47,6 +47,10 @@ const MyBookings = () => {
     }
   };
 
+  const handleChat = (bookingId) => {
+    navigate(`/chat/${bookingId}`);
+  };
+
   const filteredBookings = bookings.filter((booking) => {
     if (filter === 'all') return true;
     return booking.status.toLowerCase() === filter.toLowerCase();
@@ -94,6 +98,7 @@ const MyBookings = () => {
               key={booking._id}
               booking={booking}
               onCancel={handleCancelBooking}
+              onChat={handleChat}
             />
           ))}
         </div>

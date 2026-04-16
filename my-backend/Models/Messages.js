@@ -21,6 +21,12 @@ const messageSchema = new mongoose.Schema(
       required: true,
     },
 
+    booking_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Booking",
+      required: true,
+    },
+
     content: {
       type: String,
       required: true,

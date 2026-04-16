@@ -10,7 +10,11 @@ const api = axios.create({
 // Add token to requests if it exists
 api.interceptors.request.use(
   (config) => {
-    // Token is in cookies, no need to add it manually
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers = config.headers || {};
+      config.headers.Authorization = `Bearer ${token}`;
+    }
     return config;
   },
   (error) => Promise.reject(error)
@@ -23,6 +27,7 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       // Clear auth and redirect to login
       localStorage.removeItem('user');
+      localStorage.removeItem('token');
       window.location.href = '/login';
     }
     return Promise.reject(error);
@@ -32,6 +37,7 @@ api.interceptors.response.use(
 // Auth Services
 export const authService = {
   googleLogin: (token) => api.post('/auth/google', { token }),
+  demoLogin: (data) => api.post('/auth/demo', data),
   logout: () => api.post('/auth/logout'),
 };
 
@@ -71,11 +77,18 @@ export const roomService = {
   },
 };
 
+// Message Services
+export const messageService = {
+  getMessagesByBooking: (bookingId) => api.get(`/v1/messages/booking/${bookingId}`),
+  sendMessage: (bookingId, content) => api.post(`/v1/messages/booking/${bookingId}`, { content }),
+};
+
 // Booking Services
 export const bookingService = {
   createBooking: (data) => api.post('/v1/bookings', data),
   getMyBookings: () => api.get('/v1/bookings'),
   getBookingsByHotel: (hotelId) => api.get(`/v1/bookings/hotel/${hotelId}`),
+  getBookingsByOwner: () => api.get('/v1/bookings/owner'),
   approveBooking: (id) => api.put(`/v1/bookings/${id}/approve`),
   cancelBooking: (id) => api.delete(`/v1/bookings/${id}`),
 };

@@ -41,6 +41,11 @@ const BookingCard = ({ booking, onApprove, onCancel, isOwner = false }) => {
       )}
 
       <div className="booking-actions">
+        {onChat && (
+          <button onClick={() => onChat(booking._id)} className="chat-btn">
+            Chat
+          </button>
+        )}
         {onApprove && booking.status === 'Pending' && (
           <button onClick={() => onApprove(booking._id)} className="approve-btn">
             Approve

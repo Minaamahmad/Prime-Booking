@@ -9,6 +9,8 @@ import MyBookings from './pages/MyBookings';
 import HotelManagement from './pages/HotelManagement';
 import RoomManagement from './pages/RoomManagement';
 import OwnerDashboard from './pages/OwnerDashboard';
+import OwnerChats from './pages/OwnerChats';
+import Chat from './pages/Chat';
 import './App.css';
 
 function App() {
@@ -33,10 +35,28 @@ function App() {
               />
 
               <Route
+                path="/chat/:bookingId"
+                element={
+                  <ProtectedRoute>
+                    <Chat />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
                 path="/owner-dashboard"
                 element={
                   <ProtectedRoute requiredRole="Owner">
                     <OwnerDashboard />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/owner-chats"
+                element={
+                  <ProtectedRoute requiredRole="Owner">
+                    <OwnerChats />
                   </ProtectedRoute>
                 }
               />

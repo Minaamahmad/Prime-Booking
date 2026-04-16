@@ -69,24 +69,51 @@ export const getBookingsByUser = async (req, res) => {
 export const getBookingsByHotel = async (req, res) => {
   try {
     const hotel_id = req.params.hotelId;
+    const hotel = await Hotels.findById(hotel_id);
+    if (!hotel) {
+      return res.status(404).json({ message: 'Hotel not found' });
+    }
+    if (hotel.owner_id.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: 'Forbidden' });
+    }
+
     const bookings = await Bookings.find({ hotel_id })
-      .populate("room_id")
-      .populate("user_id", "name email");
+      .populate('room_id')
+      .populate('user_id', 'name email');
     res.status(200).json(bookings);
   } catch (error) {
-    res.status(500).json({ message: "Failed to retrieve bookings", error });
+    res.status(500).json({ message: 'Failed to retrieve bookings', error });
+  }
+};
+
+export const getBookingsByOwner = async (req, res) => {
+  try {
+    const hotels = await Hotels.find({ owner_id: req.user._id }).select('_id');
+    const hotelIds = hotels.map((hotel) => hotel._id);
+
+    const bookings = await Bookings.find({ hotel_id: { $in: hotelIds } })
+      .populate('room_id')
+      .populate('user_id', 'name email')
+      .populate('hotel_id', 'name location');
+
+    res.status(200).json(bookings);
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to retrieve owner bookings', error });
   }
 };
 
 export const approveBooking = async (req, res) => {
   const { id } = req.params;
   try {
-    const booking = await Bookings.findById(id);
+    const booking = await Bookings.findById(id).populate('hotel_id');
     if (!booking) {
-      return res.status(404).json({ message: "Booking not found!" });
+      return res.status(404).json({ message: 'Booking not found!' });
+    }
+    if (booking.hotel_id.owner_id.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: 'Forbidden' });
     }
 
-    booking.status = "Confirmed";
+    booking.status = 'Confirmed';
     await booking.save();
 
     res.status(200).json({
@@ -94,20 +121,26 @@ export const approveBooking = async (req, res) => {
       updatedBooking: booking,
     });
   } catch (error) {
-    res.status(500).json({ message: "Server error", error });
+    res.status(500).json({ message: 'Server error', error });
   }
 };
 
 export const cancelBooking = async (req, res) => {
   const { id } = req.params;
   try {
-    const booking = await Bookings.findById(id);
+    const booking = await Bookings.findById(id).populate('hotel_id');
     if (!booking) {
-      return res.status(404).json({ message: "Booking not found!" });
+      return res.status(404).json({ message: 'Booking not found!' });
     }
 
-    // Return room stock if booking is cancelled
-    if (booking.status === "Pending" || booking.status === "Confirmed") {
+    if (
+      booking.user_id.toString() !== req.user._id.toString() &&
+      booking.hotel_id.owner_id.toString() !== req.user._id.toString()
+    ) {
+      return res.status(403).json({ message: 'Forbidden' });
+    }
+
+    if (booking.status === 'Pending' || booking.status === 'Confirmed') {
       const room = await Rooms.findById(booking.room_id);
       if (room) {
         room.total_stock += 1;
@@ -121,6 +154,6 @@ export const cancelBooking = async (req, res) => {
       message: `Booking #${id} has been cancelled and room stock restored.`,
     });
   } catch (error) {
-    res.status(500).json({ message: "Server error", error });
+    res.status(500).json({ message: 'Server error', error });
   }
 };
