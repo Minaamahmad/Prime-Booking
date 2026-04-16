@@ -12,12 +12,8 @@ import bookingrouter from "./routes/BookingRoute.js";
 import "./config/passport.js";
 import cookieParser from "cookie-parser";
 import googlAuthrouter from "./Controllers/googleauth.js"
-import { http } from "http";
-import io from "./Controllers/MessagesController.js"
 const app = express();
 
-const server=http.createServer(app)
-const socket =io(server)
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -26,7 +22,6 @@ app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
-// Create uploads directories if they don't exist
 const uploadsDir = path.join(__dirname, "uploads");
 const hotelsDir = path.join(uploadsDir, "hotels");
 const roomsDir = path.join(uploadsDir, "rooms");
@@ -38,10 +33,8 @@ if (!fs.existsSync(roomsDir)) {
   fs.mkdirSync(roomsDir, { recursive: true });
 }
 
-// Serve static files from uploads directory
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// Configure multer for hotels
 const hotelStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, hotelsDir);
@@ -64,7 +57,6 @@ const hotelUpload = multer({
   },
 });
 
-// Configure multer for rooms
 const roomStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, roomsDir);
@@ -87,7 +79,6 @@ const roomUpload = multer({
   },
 });
 
-// Attach multer instances to app for use in routes
 app.uploadHotel = hotelUpload;
 app.uploadRoom = roomUpload;
 

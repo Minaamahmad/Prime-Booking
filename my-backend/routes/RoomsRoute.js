@@ -7,7 +7,7 @@ import {
   uploadRoomImages,
 } from "../Controllers/RoomsController.js";
 import express from "express";
-import { protect, authorizeRoles } from "../Middlewares/auth.js";
+import protect, { authorizeRoles } from "../Middlewares/auth.js";
 
 const router = express.Router();
 

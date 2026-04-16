@@ -1,11 +1,10 @@
 import {  createHotel,getHotelById,getHotels, publicHotels } from "../Controllers/HotelsController.js";
 import { updateHotel,deleteHotel, uploadHotelImages } from "../Controllers/HotelsController.js";
 import express from "express";
-import {protect,authorizeRoles} from "../Middlewares/auth.js";
+import protect, {authorizeRoles} from "../Middlewares/auth.js";
 
 const router = express.Router();
 
-// Middleware to attach multer to router
 router.use((req, res, next) => {
   req.hotelUpload = req.app.uploadHotel;
   next();
