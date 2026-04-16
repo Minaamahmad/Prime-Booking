@@ -1,0 +1,71 @@
+:root {
+  --primary-color: #3457dc;
+  --secondary-color: #ff6b6b;
+  --success-color: #51cf66;
+  --warning-color: #ffd93d;
+  --danger-color: #ff6b6b;
+  --dark-color: #2c3e50;
+  --light-color: #ecf0f1;
+  --border-color: #ddd;
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.15);
+
+  --text: #2c3e50;
+  --text-h: #2c3e50;
+  --bg: #f8f9fa;
+  --border: #ddd;
+  --code-bg: #f4f3ec;
+  --accent: #3457dc;
+  --accent-bg: rgba(52, 87, 220, 0.1);
+  --accent-border: rgba(52, 87, 220, 0.5);
+  --social-bg: rgba(244, 243, 236, 0.5);
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  --sans: 'Segoe UI', system-ui, Roboto, sans-serif;
+  --heading: 'Segoe UI', system-ui, Roboto, sans-serif;
+  --mono: ui-monospace, Consolas, monospace;
+
+  font: 16px/1.6 var(--sans);
+  letter-spacing: 0.16px;
+  color-scheme: light;
+  color: var(--text);
+  background: var(--bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--sans);
+  background-color: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover {
+  color: rgba(52, 87, 220, 0.8);
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
