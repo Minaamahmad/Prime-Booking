@@ -1,0 +1,134 @@
+/* Login Page */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #3457dc 0%, #667eea 100%);
+  padding: 20px;
+}
+
+.login-box {
+  background: white;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  max-width: 450px;
+  width: 100%;
+}
+
+.login-box h1 {
+  text-align: center;
+  color: var(--primary-color);
+  margin-bottom: 10px;
+  font-size: 2.5rem;
+}
+
+.login-box h2 {
+  text-align: center;
+  color: var(--dark-color);
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+.login-box > p {
+  text-align: center;
+  color: #666;
+  margin-bottom: 30px;
+}
+
+.login-options {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.google-login-btn {
+  background-color: white;
+  color: var(--dark-color);
+  border: 2px solid var(--border-color);
+  padding: 12px 20px;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  transition: all 0.3s ease;
+}
+
+.google-login-btn:hover:not(:disabled) {
+  background-color: var(--light-color);
+  border-color: var(--primary-color);
+  transform: translateY(-2px);
+}
+
+.google-icon {
+  font-size: 20px;
+}
+
+.demo-users {
+  border-top: 1px solid var(--border-color);
+  padding-top: 20px;
+}
+
+.demo-users p {
+  text-align: center;
+  font-weight: 600;
+  color: var(--dark-color);
+  margin-bottom: 15px;
+}
+
+.demo-btn {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  margin-bottom: 10px;
+}
+
+.guest-btn {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.guest-btn:hover {
+  background-color: #2845b8;
+}
+
+.owner-btn {
+  background-color: var(--secondary-color);
+  color: white;
+}
+
+.owner-btn:hover {
+  background-color: #e55555;
+}
+
+.login-footer {
+  text-align: center;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-color);
+  font-size: 12px;
+  color: #999;
+}
+
+@media (max-width: 600px) {
+  .login-box {
+    padding: 20px;
+  }
+
+  .login-box h1 {
+    font-size: 2rem;
+  }
+
+  .login-box h2 {
+    font-size: 1.4rem;
+  }
+}
