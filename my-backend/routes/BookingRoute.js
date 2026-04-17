@@ -2,6 +2,7 @@ import {
   createBooking,
   getBookingsByUser,
   getBookingsByHotel,
+  getBookingsByOwner,
   approveBooking,
   cancelBooking,
 } from "../Controllers/BookingController.js";
