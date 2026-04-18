@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { hotelService, roomService } from '../services/api';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../context/AuthContext';
 import RoomCard from '../components/RoomCard';
 import Loading from '../components/Loading';
 import ErrorAlert from '../components/ErrorAlert';
@@ -23,9 +23,9 @@ const HotelDetails = () => {
 
   useEffect(() => {
     fetchHotelDetails();
-  }, [id]);
+  }, [id, fetchHotelDetails]);
 
-  const fetchHotelDetails = async () => {
+  const fetchHotelDetails = useCallback(async () => {
     try {
       setLoading(true);
       setError('');
@@ -47,7 +47,7 @@ const HotelDetails = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id, isAuthenticated, isOwner]);
 
   const handleRoomSelect = (room) => {
     if (!isAuthenticated()) {

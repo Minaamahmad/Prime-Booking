@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../context/AuthContext';
 import { authService } from '../services/api';
 import '../styles/Navbar.css';
 
@@ -11,6 +11,7 @@ const Navbar = () => {
     try {
       await authService.logout();
     } catch (err) {
+      console.error('Logout error:', err);
       // ignore logout errors, still clear client state
     }
     logout();

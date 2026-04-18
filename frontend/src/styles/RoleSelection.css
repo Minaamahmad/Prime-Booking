@@ -1,0 +1,119 @@
+/* Role Selection Page */
+.role-selection-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #3457dc 0%, #667eea 100%);
+  padding: 20px;
+}
+
+.role-selection-box {
+  background: white;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  max-width: 900px;
+  width: 100%;
+  text-align: center;
+}
+
+.role-selection-box h1 {
+  text-align: center;
+  color: var(--primary-color);
+  margin-bottom: 10px;
+  font-size: 2.5rem;
+}
+
+.role-selection-box h2 {
+  text-align: center;
+  color: var(--dark-color);
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+.role-selection-box > p {
+  text-align: center;
+  color: #666;
+  margin-bottom: 30px;
+}
+
+.role-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-top: 30px;
+}
+
+.role-card {
+  background: white;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  padding: 30px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.role-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.guest-card:hover {
+  border-color: var(--primary-color);
+  background-color: rgba(52, 87, 220, 0.05);
+}
+
+.owner-card:hover {
+  border-color: var(--secondary-color);
+  background-color: rgba(232, 85, 85, 0.05);
+}
+
+.role-icon {
+  font-size: 3rem;
+  margin-bottom: 15px;
+}
+
+.role-card h3 {
+  color: var(--dark-color);
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+}
+
+.role-card p {
+  color: #666;
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+}
+
+.role-card ul {
+  list-style: none;
+  padding: 0;
+  text-align: left;
+}
+
+.role-card li {
+  color: #555;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .role-options {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .role-selection-box {
+    padding: 20px;
+  }
+
+  .role-selection-box h1 {
+    font-size: 2rem;
+  }
+
+  .role-selection-box h2 {
+    font-size: 1.4rem;
+  }
+}

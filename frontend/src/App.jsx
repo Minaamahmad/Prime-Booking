@@ -11,6 +11,7 @@ import RoomManagement from './pages/RoomManagement';
 import OwnerDashboard from './pages/OwnerDashboard';
 import OwnerChats from './pages/OwnerChats';
 import Chat from './pages/Chat';
+import RoleSelection from './pages/RoleSelection';
 import './App.css';
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
           <main className="main-content">
             <Routes>
               <Route path="/login" element={<Login />} />
+              <Route path="/select-role" element={<RoleSelection />} />
               <Route path="/" element={<Home />} />
               <Route path="/hotel/:id" element={<HotelDetails />} />
 

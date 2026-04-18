@@ -1,5 +1,6 @@
+import cors from 'cors';
 import express from "express";
-import cors from "cors";
+import 'dotenv/config'; 
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import multer from "multer";
@@ -23,6 +24,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 dotenv.config();
+
 app.use(
   cors({
     origin: process.env.FRONTEND_URL || "http://localhost:5173",
@@ -31,6 +33,16 @@ app.use(
 );
 app.use(express.json());
 app.use(cookieParser());
+const URI = process.env.MONGODB_URI;
+mongoose
+  .connect(URI)
+  .then(() => {
+    console.log("Connected to MongoDB");
+  })
+  .catch((err) => {
+    console.error("Error connecting to MongoDB:", err);
+  });
+
 
 const uploadsDir = path.join(__dirname, "uploads");
 const hotelsDir = path.join(uploadsDir, "hotels");
@@ -92,15 +104,7 @@ const roomUpload = multer({
 app.uploadHotel = hotelUpload;
 app.uploadRoom = roomUpload;
 
-const URI = process.env.MONGO_URI;
-mongoose
-  .connect(URI)
-  .then(() => {
-    console.log("Connected to MongoDB");
-  })
-  .catch((err) => {
-    console.error("Error connecting to MongoDB:", err);
-  });
+
 
 const io = new Server(server, {
   cors: {

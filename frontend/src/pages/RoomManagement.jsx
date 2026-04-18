@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { roomService } from '../services/api';
 import ErrorAlert from '../components/ErrorAlert';
@@ -21,11 +21,7 @@ const RoomManagement = () => {
     total_stock: '',
   });
 
-  useEffect(() => {
-    fetchRooms();
-  }, [hotelId]);
-
-  const fetchRooms = async () => {
+  const fetchRooms = useCallback(async () => {
     try {
       setLoading(true);
       setError('');
@@ -36,7 +32,11 @@ const RoomManagement = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [hotelId]);
+
+  useEffect(() => {
+    fetchRooms();
+  }, [hotelId, fetchRooms]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;

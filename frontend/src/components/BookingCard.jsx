@@ -1,6 +1,6 @@
 import '../styles/BookingCard.css';
 
-const BookingCard = ({ booking, onApprove, onCancel, isOwner = false }) => {
+const BookingCard = ({ booking, onApprove, onCancel, onChat, isOwner = false }) => {
   const roomName = booking.room_id?.type || 'Unknown';
   const hotelName = booking.hotel_id?.name || 'Unknown Hotel';
   const checkIn = new Date(booking.check_in).toLocaleDateString();

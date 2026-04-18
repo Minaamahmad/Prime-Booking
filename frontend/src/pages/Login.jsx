@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../context/AuthContext';
 import { authService } from '../services/api';
 import ErrorAlert from '../components/ErrorAlert';
 import '../styles/Login.css';
@@ -32,6 +32,10 @@ const Login = () => {
     }
   };
 
+  const handleGoogleLogin = () => {
+    window.location.href = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/auth/google`;
+  };
+
   return (
     <div className="login-container">
       <div className="login-box">
@@ -42,10 +46,14 @@ const Login = () => {
         <ErrorAlert message={error} onClose={() => setError('')} />
 
         <div className="login-options">
-          <button className="google-login-btn" disabled>
+          <button className="google-login-btn" disabled={loading} onClick={handleGoogleLogin}>
             <span className="google-icon">🔐</span>
-            <span>Sign in with Google (not configured)</span>
+            <span>Continue with Google</span>
           </button>
+
+          <div className="divider">
+            <span>or try demo</span>
+          </div>
 
           <div className="demo-users">
             <p>Demo Users:</p>

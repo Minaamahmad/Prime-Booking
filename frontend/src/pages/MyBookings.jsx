@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { bookingService } from '../services/api';
 import BookingCard from '../components/BookingCard';
 import ErrorAlert from '../components/ErrorAlert';
@@ -9,7 +9,6 @@ import '../styles/MyBookings.css';
 
 const MyBookings = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');

@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { messageService } from '../services/api';
 import socket from '../socket';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../context/AuthContext';
 import ErrorAlert from '../components/ErrorAlert';
 import Loading from '../components/Loading';
 import '../styles/Chat.css';
@@ -58,7 +58,8 @@ const Chat = () => {
     if (!content.trim()) return;
     try {
       setSending(true);
-      await messageService.sendMessage(bookingId, content.trim());
+      const response = await messageService.sendMessage(bookingId, content.trim());
+      setMessages((prev) => [...prev, response.data]);
       setContent('');
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to send message');
