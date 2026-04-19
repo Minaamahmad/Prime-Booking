@@ -20,6 +20,7 @@ const RoomManagement = () => {
     price_per_night: '',
     total_stock: '',
   });
+  const [selectedImages, setSelectedImages] = useState([]);
 
   const fetchRooms = useCallback(async () => {
     try {
@@ -46,6 +47,10 @@ const RoomManagement = () => {
     }));
   };
 
+  const handleFileChange = (e) => {
+    setSelectedImages(Array.from(e.target.files));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.price_per_night || !formData.total_stock) {
@@ -54,14 +59,25 @@ const RoomManagement = () => {
     }
 
     try {
+      let roomId;
       if (editingRoom) {
         await roomService.updateRoom(hotelId, editingRoom._id, formData);
+        roomId = editingRoom._id;
         setSuccess('Room updated successfully!');
       } else {
-        await roomService.createRoom(hotelId, formData);
+        const response = await roomService.createRoom(hotelId, formData);
+        roomId = response.data._id;
         setSuccess('Room created successfully!');
       }
+
+      // Upload images if selected
+      if (selectedImages.length > 0) {
+        await roomService.uploadRoomImages(hotelId, roomId, selectedImages);
+        setSuccess('Room and images uploaded successfully!');
+      }
+
       setFormData({ type: 'Single', price_per_night: '', total_stock: '' });
+      setSelectedImages([]);
       setEditingRoom(null);
       setShowForm(false);
       fetchRooms();
@@ -97,6 +113,7 @@ const RoomManagement = () => {
   const handleCancel = () => {
     setEditingRoom(null);
     setFormData({ type: 'Single', price_per_night: '', total_stock: '' });
+    setSelectedImages([]);
     setShowForm(false);
   };
 
@@ -167,6 +184,21 @@ const RoomManagement = () => {
             />
           </div>
 
+          <div className="form-group">
+            <label htmlFor="images">Room Images</label>
+            <input
+              type="file"
+              id="images"
+              name="images"
+              multiple
+              accept="image/*"
+              onChange={handleFileChange}
+            />
+            {selectedImages.length > 0 && (
+              <p>{selectedImages.length} image(s) selected</p>
+            )}
+          </div>
+
           <div className="form-actions">
             <button type="button" onClick={handleCancel} className="cancel-btn">
               Cancel
@@ -192,6 +224,9 @@ const RoomManagement = () => {
                 <p>
                   Available: <strong>{room.total_stock}</strong> rooms
                 </p>
+                {room.images && room.images.length > 0 && (
+                  <p className="images-count">📷 {room.images.length} images</p>
+                )}
               </div>
               <div className="room-actions">
                 <button

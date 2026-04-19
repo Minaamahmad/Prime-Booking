@@ -19,6 +19,7 @@ const HotelManagement = () => {
     location: '',
     description: '',
   });
+  const [selectedImages, setSelectedImages] = useState([]);
 
   useEffect(() => {
     fetchHotels();
@@ -45,6 +46,10 @@ const HotelManagement = () => {
     }));
   };
 
+  const handleFileChange = (e) => {
+    setSelectedImages(Array.from(e.target.files));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.name || !formData.location) {
@@ -53,14 +58,25 @@ const HotelManagement = () => {
     }
 
     try {
+      let hotelId;
       if (editingHotel) {
         await hotelService.updateHotel(editingHotel._id, formData);
+        hotelId = editingHotel._id;
         setSuccess('Hotel updated successfully!');
       } else {
-        await hotelService.createHotel(formData);
+        const response = await hotelService.createHotel(formData);
+        hotelId = response.data._id;
         setSuccess('Hotel created successfully!');
       }
+
+      // Upload images if selected
+      if (selectedImages.length > 0) {
+        await hotelService.uploadHotelImages(hotelId, selectedImages);
+        setSuccess('Hotel and images uploaded successfully!');
+      }
+
       setFormData({ name: '', location: '', description: '' });
+      setSelectedImages([]);
       setEditingHotel(null);
       setShowForm(false);
       fetchHotels();
@@ -96,6 +112,7 @@ const HotelManagement = () => {
   const handleCancel = () => {
     setEditingHotel(null);
     setFormData({ name: '', location: '', description: '' });
+    setSelectedImages([]);
     setShowForm(false);
   };
 
@@ -158,6 +175,21 @@ const HotelManagement = () => {
               onChange={handleInputChange}
               rows="4"
             />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="images">Hotel Images</label>
+            <input
+              type="file"
+              id="images"
+              name="images"
+              multiple
+              accept="image/*"
+              onChange={handleFileChange}
+            />
+            {selectedImages.length > 0 && (
+              <p>{selectedImages.length} image(s) selected</p>
+            )}
           </div>
 
           <div className="form-actions">

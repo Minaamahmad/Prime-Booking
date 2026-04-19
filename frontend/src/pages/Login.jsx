@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { authService } from '../services/api';
 import ErrorAlert from '../components/ErrorAlert';
 import '../styles/Login.css';
+import Mybutton from '../components/button.jsx';
+
 
 const Login = () => {
   const { login } = useAuth();
@@ -11,26 +12,7 @@ const Login = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleDemoLogin = async (role) => {
-    try {
-      setLoading(true);
-      setError('');
-
-      const payload = {
-        name: role === 'Owner' ? 'Demo Owner' : 'Demo Guest',
-        email: role === 'Owner' ? 'owner@example.com' : 'guest@example.com',
-        role,
-      };
-
-      const response = await authService.demoLogin(payload);
-      login(response.data.user, response.data.token);
-      navigate('/');
-    } catch (err) {
-      setError(err.response?.data?.message || 'Login failed. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
+  
 
   const handleGoogleLogin = () => {
     window.location.href = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/auth/google`;
@@ -39,44 +21,26 @@ const Login = () => {
   return (
     <div className="login-container">
       <div className="login-box">
-        <h1>🏨 HotelHub</h1>
+        <h1>Prime Booking</h1>
         <h2>Welcome Back</h2>
         <p>Sign in to book hotels or manage your properties</p>
 
         <ErrorAlert message={error} onClose={() => setError('')} />
+           
+        <div className="w-91 h-40  flex items-center justify-center">
 
-        <div className="login-options">
-          <button className="google-login-btn" disabled={loading} onClick={handleGoogleLogin}>
-            <span className="google-icon">🔐</span>
-            <span>Continue with Google</span>
-          </button>
+          
+           <Mybutton   
+           
+             disabled={loading} onClick={handleGoogleLogin}
+          
+           
+           
+           /> 
+           </div>
+     
 
-          <div className="divider">
-            <span>or try demo</span>
-          </div>
-
-          <div className="demo-users">
-            <p>Demo Users:</p>
-            <button
-              className="demo-btn guest-btn"
-              disabled={loading}
-              onClick={() => handleDemoLogin('Guest')}
-            >
-              Login as Guest
-            </button>
-            <button
-              className="demo-btn owner-btn"
-              disabled={loading}
-              onClick={() => handleDemoLogin('Owner')}
-            >
-              Login as Owner
-            </button>
-          </div>
-        </div>
-
-        <div className="login-footer">
-          <p>Note: This is a demo. Implement actual Google OAuth authentication in production.</p>
-        </div>
+       
       </div>
     </div>
   );

@@ -22,7 +22,7 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="navbar-container">
         <Link to="/" className="navbar-logo">
-          🏨 HotelHub
+          Prime Booking
         </Link>
         
         <div className="nav-menu">

@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema(
 
     provider: {
       type: String,
-      enum: ["google", "facebook", "demo"],
+      enum: ["google", "facebook",],
       required: true,
     },
 
