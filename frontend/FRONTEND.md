@@ -197,7 +197,6 @@ The application includes comprehensive error handling:
 
 ## 🔐 Authentication
 
-- **Demo Login:** Use demo credentials to test different roles
   - Guest: For booking hotel rooms
   - Owner: For managing hotels and rooms
 - **Local Storage:** User session persisted in browser
@@ -214,9 +213,7 @@ All components are fully responsive:
 - **Readable text** at all breakpoints
 - **Flexible images** that scale properly
 
-## 🚦 Demo User Accounts
 
-For testing, use the demo login options:
 
 1. **Guest Account:**
    - Role: Guest

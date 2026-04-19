@@ -15,3 +15,4 @@ Thumbs.db
 # Build folders (if you use them)
 dist/
 build/
+.env

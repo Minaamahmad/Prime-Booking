@@ -187,7 +187,7 @@ POST   /auth/google   - Google OAuth authentication
 ## 📱 User Flows
 
 ### Guest User Flow
-1. Login (or use demo guest credentials)
+1. Login 
 2. Browse hotels on home page
 3. Search for specific location
 4. Click on hotel to view details
@@ -197,7 +197,7 @@ POST   /auth/google   - Google OAuth authentication
 8. Cancel booking if needed
 
 ### Owner User Flow
-1. Login (or use demo owner credentials)
+1. Login 
 2. Go to Owner Dashboard
 3. Create new hotel
 4. Add hotel details
@@ -236,8 +236,7 @@ POST   /auth/google   - Google OAuth authentication
 
 ## 🧪 Testing the Application
 
-### Demo Credentials
-The frontend includes demo login options for testing:
+
 
 1. **Guest Account:**
    - Role: Guest
@@ -247,7 +246,7 @@ The frontend includes demo login options for testing:
    - Role: Owner
    - Can manage hotels and bookings
 
-Simply click the demo buttons on the login page.
+
 
 ## 📝 Database Models
 

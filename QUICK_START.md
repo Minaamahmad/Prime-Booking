@@ -41,7 +41,7 @@ npm run dev
 
 ### **Step 3: Test the Application**
 1. Open http://localhost:5173 in your browser
-2. Click "Login as Guest" or "Login as Owner" on the demo login page
+2. Click Login 
 3. Start exploring!
 
 ---
@@ -148,9 +148,9 @@ All backend endpoints fully integrated:
 
 ---
 
-## 📱 Demo Accounts
 
-Login page includes demo buttons for easy testing:
+
+
 
 1. **Guest Account**
    - Can browse hotels
@@ -254,7 +254,6 @@ npm run lint      # Run ESLint
    ```
 
 3. ✅ **Test Features**
-   - Login with demo account
    - Browse hotels
    - Create bookings
    - Manage as owner
