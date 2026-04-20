@@ -7,7 +7,6 @@ import Mybutton from '../components/button.jsx';
 
 
 const Login = () => {
-  const { login } = useAuth();
   const navigate = useNavigate();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);

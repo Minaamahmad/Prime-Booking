@@ -21,32 +21,34 @@ const HotelDetails = () => {
     check_out: '',
   });
 
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+
   useEffect(() => {
-    fetchHotelDetails();
-  }, [id, fetchHotelDetails]);
+    const fetchHotelDetails = async () => {
+      try {
+        setLoading(true);
+        setError('');
+        const hotelResponse = await hotelService.getHotelById(id);
+        setHotel(hotelResponse.data);
 
-  const fetchHotelDetails = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError('');
-      const hotelResponse = await hotelService.getHotelById(id);
-      setHotel(hotelResponse.data);
-
-      // Try to fetch rooms if user is owner
-      if (isAuthenticated() && isOwner()) {
-        try {
-          const roomsResponse = await roomService.getRoomsByHotel(id);
-          setRooms(roomsResponse.data);
-        } catch {
-          // User doesn't own this hotel, fetch public rooms
-          setRooms([]);
+        // Try to fetch rooms if user is owner
+        if (isAuthenticated() && isOwner()) {
+          try {
+            const roomsResponse = await roomService.getRoomsByHotel(id);
+            setRooms(roomsResponse.data);
+          } catch {
+            // User doesn't own this hotel, fetch public rooms
+            setRooms([]);
+          }
         }
+      } catch (err) {
+        setError(err.response?.data?.message || 'Failed to load hotel details');
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      setError(err.response?.data?.message || 'Failed to load hotel details');
-    } finally {
-      setLoading(false);
-    }
+    };
+
+    fetchHotelDetails();
   }, [id, isAuthenticated, isOwner]);
 
   const handleRoomSelect = (room) => {
@@ -66,6 +68,10 @@ const HotelDetails = () => {
   };
 
   const handleBooking = async () => {
+    if (!selectedRoom) {
+      setError('Please select a room first');
+      return;
+    }
     if (!bookingDates.check_in || !bookingDates.check_out) {
       setError('Please select both check-in and check-out dates');
       return;
@@ -102,7 +108,7 @@ const HotelDetails = () => {
       <div className="hotel-header">
         <div className="hotel-images">
           {hotel.images && hotel.images.length > 0 ? (
-            <img src={hotel.images[0]} alt={hotel.name} className="main-image" />
+            <img src={`${API_BASE_URL}${hotel.images[0]}`} alt={hotel.name} className="main-image" />
           ) : (
             <div className="placeholder-image">No image available</div>
           )}
@@ -112,7 +118,7 @@ const HotelDetails = () => {
           <h1>{hotel.name}</h1>
           <p className="location">📍 {hotel.location}</p>
           <p className="description">{hotel.description}</p>
-          {hotel.owner_id && (
+          {hotel.owner_id && typeof hotel.owner_id === 'object' && hotel.owner_id.name && (
             <p className="owner">Managed by: {hotel.owner_id.name}</p>
           )}
         </div>
@@ -147,8 +153,8 @@ const HotelDetails = () => {
               ✕
             </button>
 
-            <h3>Book {selectedRoom.type} Room</h3>
-            <p>Price: ${selectedRoom.price_per_night} per night</p>
+            <h3>Book {selectedRoom?.type} Room</h3>
+            <p>Price: ${selectedRoom?.price_per_night} per night</p>
 
             <div className="booking-form">
               <div className="form-group">
@@ -175,7 +181,7 @@ const HotelDetails = () => {
                 />
               </div>
 
-              {bookingDates.check_in && bookingDates.check_out && (
+              {bookingDates.check_in && bookingDates.check_out && selectedRoom && (
                 <div className="price-summary">
                   <p>
                     Nights: {Math.ceil(

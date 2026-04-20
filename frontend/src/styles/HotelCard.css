@@ -65,8 +65,8 @@
 }
 
 .view-btn {
-  background-color: var(--primary-color);
-  color: white;
+  background-color: rgb(8, 49, 10);
+  color: rgb(243, 229, 229);
   padding: 8px 16px;
   border: none;
   border-radius: 4px;

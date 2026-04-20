@@ -1,7 +1,10 @@
 import '../styles/RoomCard.css';
 
 const RoomCard = ({ room, onSelect }) => {
-  const firstImage = room.images?.[0] || 'https://via.placeholder.com/250x180?text=Room';
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+  const firstImage = room.images?.[0] 
+    ? `${API_BASE_URL}${room.images[0]}` 
+    : 'https://via.placeholder.com/250x180?text=Room';
 
   return (
     <div className="room-card">

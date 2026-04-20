@@ -10,9 +10,6 @@ const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const checkAuth = async () => {
-      const savedUser = localStorage.getItem('user');
-      const savedToken = localStorage.getItem('token');
-
       // Check for temporary token (user needs role selection)
       const tempToken = document.cookie.split(';').find(c => c.trim().startsWith('temp_token='))?.split('=')[1];
 
@@ -23,38 +20,23 @@ const AuthProvider = ({ children }) => {
         return;
       }
 
-      if (savedToken) {
-        try {
-          // Check if token is still valid by fetching current user
-          const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/auth/me`, {
-            credentials: 'include',
-            headers: {
-              'Authorization': `Bearer ${savedToken}`
-            }
-          });
+      // Try to fetch current user with cookies
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/auth/me`, {
+          credentials: 'include'
+        });
 
-          if (response.ok) {
-            const data = await response.json();
-            setUser(data.user);
-            setToken(savedToken);
-          } else {
-            // Token invalid, clear storage
-            localStorage.removeItem('user');
-            localStorage.removeItem('token');
-          }
-        } catch (err) {
-          // Network error or other issue, clear storage
-          console.error('Auth check failed:', err);
-          localStorage.removeItem('user');
-          localStorage.removeItem('token');
+        if (response.ok) {
+          const data = await response.json();
+          setUser(data.user);
+          // Note: token is in httpOnly cookie, not stored in localStorage
+        } else {
+          // Not authenticated
+          setUser(null);
         }
-      } else if (savedUser) {
-        try {
-          setUser(JSON.parse(savedUser));
-        } catch (err) {
-          console.error('Error parsing saved user:', err);
-          localStorage.removeItem('user');
-        }
+      } catch (err) {
+        console.error('Auth check failed:', err);
+        setUser(null);
       }
 
       setLoading(false);
@@ -66,9 +48,8 @@ const AuthProvider = ({ children }) => {
   const login = useCallback((userData, authToken) => {
     try {
       setUser(userData);
-      setToken(authToken);
+      // Store user in localStorage for display, but token is in httpOnly cookie
       localStorage.setItem('user', JSON.stringify(userData));
-      localStorage.setItem('token', authToken || '');
       setError(null);
       return userData;
     } catch (err) {
@@ -77,11 +58,17 @@ const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const logout = useCallback(() => {
+  const logout = useCallback(async () => {
+    try {
+      await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/auth/logout`, {
+        method: 'POST',
+        credentials: 'include'
+      });
+    } catch (err) {
+      console.error('Logout API error:', err);
+    }
     setUser(null);
-    setToken(null);
     localStorage.removeItem('user');
-    localStorage.removeItem('token');
     setError(null);
   }, []);
 

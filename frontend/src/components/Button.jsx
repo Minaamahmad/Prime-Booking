@@ -1,9 +1,19 @@
-export default function Mybutton() {
-    return (
-        <>
-            <style>{`
-            
-            button {
+import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+
+export default function Mybutton({ disabled = false, onClick }) {
+  const handleGoogleLogin = () => {
+    if (onClick) {
+      onClick();
+    } else {
+      window.location.href = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/auth/google`;
+    }
+  };
+
+  return (
+    <>
+      <style>{`
+        button {
   border-radius: .25rem;
   text-transform: uppercase;
   font-style: normal;
@@ -23,19 +33,24 @@ export default function Mybutton() {
   overflow: hidden;
 }
 
-button:hover {
+button:hover:not(:disabled) {
   cursor: pointer;
   transition: all .3s ease-in;
   padding-right: 30px;
   padding-left: 30px;
 }
-            `
-            }</style>
-            <div >
-                <button >
-                    Login with Google
-                </button>
-            </div>
-        </>
-    );
-};
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+      `}
+      </style>
+      <div>
+        <button disabled={disabled} onClick={handleGoogleLogin}>
+          Login with Google
+        </button>
+      </div>
+    </>
+  );
+}

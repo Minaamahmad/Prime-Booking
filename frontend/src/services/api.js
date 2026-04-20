@@ -10,11 +10,7 @@ const api = axios.create({
 // Add token to requests if it exists
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers = config.headers || {};
-      config.headers.Authorization = `Bearer ${token}`;
-    }
+    // Token is in httpOnly cookie, sent via credentials
     return config;
   },
   (error) => Promise.reject(error)
@@ -27,7 +23,6 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       // Clear auth and redirect to login
       localStorage.removeItem('user');
-      localStorage.removeItem('token');
       window.location.href = '/login';
     }
     return Promise.reject(error);
@@ -37,7 +32,6 @@ api.interceptors.response.use(
 // Auth Services
 export const authService = {
   googleLogin: (token) => api.post('/auth/google', { token }),
-  demoLogin: (data) => api.post('/auth/demo', data),
   selectRole: (data) => api.post('/auth/select-role', data),
   getCurrentUser: () => api.get('/auth/me'),
   logout: () => api.post('/auth/logout'),
