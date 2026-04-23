@@ -60,6 +60,7 @@ export const hotelService = {
 
 // Room Services
 export const roomService = {
+  getAvailableRoomsByHotel: (hotelId) => api.get(`/v1/rooms/available/${hotelId}`),
   getRoomsByHotel: (hotelId) => api.get(`/v1/rooms/${hotelId}`),
   getRoom: (hotelId, roomId) => api.get(`/v1/rooms/${hotelId}/${roomId}`),
   createRoom: (hotelId, data) => api.post(`/v1/rooms/${hotelId}`, data),

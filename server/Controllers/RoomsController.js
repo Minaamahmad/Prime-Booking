@@ -50,6 +50,24 @@ export const createRoom = async (req, res) => {
   }
 };
 
+// Get all rooms for a hotel (public - for guests to view available rooms)
+export const getAvailableRoomsByHotel = async (req, res) => {
+  try {
+    const hotel_id = req.params.id;
+
+    // Verify hotel exists
+    const hotel = await Hotel.findById(hotel_id);
+    if (!hotel) {
+      return res.status(404).json({ message: "Hotel not found" });
+    }
+
+    const rooms = await Room.find({ hotel_id }).populate("hotel_id");
+    res.status(200).json(rooms);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to retrieve Rooms", error });
+  }
+};
+
 // Get all rooms for a hotel
 export const getRoomsByHotel = async (req, res) => {
   try {

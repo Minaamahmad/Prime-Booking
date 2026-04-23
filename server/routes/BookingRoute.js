@@ -12,9 +12,9 @@ import protect, { authorizeRoles } from "../Middlewares/auth.js";
 const router = express.Router();
 
 
-router.post('/', protect, authorizeRoles('Guest'), createBooking);
+router.post('/', protect, createBooking);
 
-router.get('/', protect, authorizeRoles('Guest'), getBookingsByUser);
+router.get('/', protect, getBookingsByUser);
 
 router.get('/hotel/:hotelId', protect, authorizeRoles('Owner'), getBookingsByHotel);
 

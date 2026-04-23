@@ -1,6 +1,7 @@
 import {
   createRoom,
   getRoomsByHotel,
+  getAvailableRoomsByHotel,
   getRoom,
   updateRoom,
   deleteRoom,
@@ -20,7 +21,10 @@ router.use((req, res, next) => {
 // Create a new room for a hotel
 router.post("/:id", protect, authorizeRoles("Owner"), createRoom);
 
-// Get all rooms for a specific hotel
+// Get available rooms for a specific hotel (public - for guests) - Must come BEFORE /:id
+router.get("/available/:id", getAvailableRoomsByHotel);
+
+// Get all rooms for a specific hotel (owner only)
 router.get("/:id", protect, authorizeRoles("Owner"), getRoomsByHotel);
 
 // Get a single room by ID

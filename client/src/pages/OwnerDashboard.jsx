@@ -17,6 +17,7 @@ const OwnerDashboard = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [actionLoadingId, setActionLoadingId] = useState(null);
 
   useEffect(() => {
     fetchDashboardData();
@@ -55,6 +56,50 @@ const OwnerDashboard = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const recomputeStats = (nextBookings, nextHotels) => {
+    const safeBookings = Array.isArray(nextBookings) ? nextBookings : [];
+    const safeHotels = Array.isArray(nextHotels) ? nextHotels : [];
+
+    const pendingBookings = safeBookings.filter((b) => b.status === 'Pending').length;
+    const confirmedBookings = safeBookings.filter((b) => b.status === 'Confirmed').length;
+
+    setStats({
+      totalHotels: safeHotels.length,
+      totalBookings: safeBookings.length,
+      pendingBookings,
+      confirmedBookings,
+    });
+  };
+
+  const handleApprove = async (bookingId) => {
+    if (!bookingId) return;
+    try {
+      setError('');
+      setActionLoadingId(bookingId);
+      const res = await bookingService.approveBooking(bookingId);
+      const updated = res?.data?.updatedBooking;
+
+      setBookings((prev) => {
+        const next = prev.map((b) => {
+          if (b._id !== bookingId) return b;
+          if (!updated) return { ...b, status: 'Confirmed' };
+          return { ...b, ...updated };
+        });
+        recomputeStats(next, hotels);
+        return next;
+      });
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to approve booking');
+    } finally {
+      setActionLoadingId(null);
+    }
+  };
+
+  const handleChat = (bookingId) => {
+    if (!bookingId) return;
+    navigate(`/chat/${bookingId}`);
   };
 
   // Helper to generate dynamic status pill colors based on the reference image
@@ -235,9 +280,27 @@ const OwnerDashboard = () => {
                           </span>
                         </td>
                         <td className="py-4 px-2 text-center">
-                          <button className="w-8 h-8 flex items-center justify-center rounded-xl border border-gray-200 text-gray-500 hover:bg-[#0B0F19] hover:text-white transition-all mx-auto shadow-sm">
-                            ↗
-                          </button>
+                          <div className="flex items-center justify-center gap-2">
+                            <button
+                              type="button"
+                              onClick={() => handleChat(booking._id)}
+                              className="w-9 h-9 flex items-center justify-center rounded-xl border border-gray-200 text-gray-500 hover:bg-[#0B0F19] hover:text-white transition-all shadow-sm"
+                              title="Open chat"
+                            >
+                              💬
+                            </button>
+                            {booking.status === 'Pending' ? (
+                              <button
+                                type="button"
+                                onClick={() => handleApprove(booking._id)}
+                                disabled={actionLoadingId === booking._id}
+                                className="px-3 py-2 rounded-xl bg-[#00E08F] text-[#0B0F19] font-semibold text-xs shadow-sm hover:brightness-95 transition disabled:opacity-60 disabled:cursor-not-allowed"
+                                title="Approve booking"
+                              >
+                                {actionLoadingId === booking._id ? 'Approving…' : 'Approve'}
+                              </button>
+                            ) : null}
+                          </div>
                         </td>
                       </tr>
                     ))
