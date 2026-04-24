@@ -316,49 +316,8 @@ const OwnerDashboard = () => {
             </div>
           </div>
 
-          {/* Your Hotels List */}
-          {hotels.length > 0 && (
-            <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm">
-              <div className="mb-6">
-                <h2 className="text-xl font-bold text-gray-900">Your Hotels</h2>
-                <p className="text-sm text-gray-400 mt-1">Select a hotel to manage its rooms</p>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-                {hotels.map((hotel) => (
-                  <div 
-                    key={hotel._id} 
-                    className="p-5 border border-gray-100 rounded-2xl bg-[#F9FAFB] hover:border-gray-300 hover:shadow-md transition-all flex flex-col justify-between"
-                  >
-                    <div>
-                      {hotel.images && hotel.images.length > 0 ? (
-                        <img
-                          src={hotel.images[0].startsWith('http') ? hotel.images[0] : `${API_BASE_URL}${hotel.images[0]}`}
-                          alt={hotel.name}
-                          className="w-12 h-12 rounded-xl object-cover shadow-sm mb-4"
-                        />
-                      ) : (
-                        <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-sm mb-4 text-xl">
-                          🏨
-                        </div>
-                      )}
-                      <h3 className="text-lg font-bold text-gray-900 line-clamp-1">{hotel.name}</h3>
-                      <p className="text-sm text-gray-500 mt-1 flex items-center gap-1 line-clamp-1">
-                        <span className="text-gray-400">📍</span> {hotel.location}
-                      </p>
-                    </div>
-                    
-                    <button
-                      onClick={() => navigate(`/rooms/${hotel._id}`)}
-                      className="mt-6 w-full py-2.5 bg-white border border-gray-200 text-gray-800 text-sm font-semibold rounded-xl shadow-sm hover:bg-gray-50 transition-colors"
-                    >
-                      Manage Rooms
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+          
+          
           
         </div>
       )}

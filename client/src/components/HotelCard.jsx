@@ -3,7 +3,9 @@ import { Link } from 'react-router-dom';
 const HotelCard = ({ hotel }) => {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
   const firstImage = hotel.images?.[0]
-    ? `${API_BASE_URL}${hotel.images[0]}`
+    ? hotel.images[0].startsWith('http') 
+      ? hotel.images[0] 
+      : `${API_BASE_URL}${hotel.images[0]}`
     : 'https://via.placeholder.com/300x200?text=Hotel';
 
   return (

@@ -4,14 +4,14 @@ import { hotelService } from '../services/api';
 import ErrorAlert from '../components/ErrorAlert';
 import SuccessAlert from '../components/SuccessAlert';
 import Loading from '../components/Loading';
-import { Bold, Italic, List, ListOrdered, Wifi, Coffee, Waves } from "lucide-react";
+import { Bold, Italic, List, ListOrdered, Wifi, Coffee, Waves, ArrowLeft, Plus, X, Edit2, Trash2, Settings } from "lucide-react";
 
 const HotelManagement = () => {
   const navigate = useNavigate();
   const [hotels, setHotels] = useState([]);
-  const[loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const[success, setSuccess] = useState('');
+  const [success, setSuccess] = useState('');
   const [editingHotel, setEditingHotel] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
@@ -20,14 +20,11 @@ const HotelManagement = () => {
     description: '',
   });
   const descriptionRef = useRef(null);
-  const[selectedImages, setSelectedImages] = useState([]);
-
-  // Base URL for images if they are stored as relative paths on your backend
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+  const [selectedImages, setSelectedImages] = useState([]);
 
   useEffect(() => {
     fetchHotels();
-  },[]);
+  }, []);
 
   const fetchHotels = async () => {
     try {
@@ -44,10 +41,7 @@ const HotelManagement = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const applyToSelection = ({ prefix = "", suffix = "" }) => {
@@ -57,15 +51,11 @@ const HotelManagement = () => {
     const end = el.selectionEnd ?? 0;
     const value = el.value ?? "";
     const selected = value.slice(start, end);
-
     const next = value.slice(0, start) + prefix + selected + suffix + value.slice(end);
     setFormData((prev) => ({ ...prev, description: next }));
-
     requestAnimationFrame(() => {
       el.focus();
-      const cursorStart = start + prefix.length;
-      const cursorEnd = end + prefix.length;
-      el.setSelectionRange(cursorStart, cursorEnd);
+      el.setSelectionRange(start + prefix.length, end + prefix.length);
     });
   };
 
@@ -77,7 +67,6 @@ const HotelManagement = () => {
     const value = el.value ?? "";
     const next = value.slice(0, start) + text + value.slice(end);
     setFormData((prev) => ({ ...prev, description: next }));
-
     requestAnimationFrame(() => {
       el.focus();
       const pos = start + text.length;
@@ -92,19 +81,15 @@ const HotelManagement = () => {
     const end = el.selectionEnd ?? 0;
     const value = el.value ?? "";
     const selected = value.slice(start, end);
-
     const lines = (selected || "").split("\n");
     const hasSelection = end > start;
     const bulletLines = (hasSelection ? lines : [""]).map((l) => (l.trim().length ? `- ${l.replace(/^-+\s*/, "")}` : "- "));
     const insertText = bulletLines.join("\n");
-
     const next = value.slice(0, start) + insertText + value.slice(end);
     setFormData((prev) => ({ ...prev, description: next }));
-
     requestAnimationFrame(() => {
       el.focus();
-      const newPos = start + insertText.length;
-      el.setSelectionRange(newPos, newPos);
+      el.setSelectionRange(start + insertText.length, start + insertText.length);
     });
   };
 
@@ -117,21 +102,17 @@ const HotelManagement = () => {
     const selected = value.slice(start, end);
     const lines = (selected || "").split("\n");
     const hasSelection = end > start;
-
     const numbered = (hasSelection ? lines : [""]).map((l, idx) => {
       const n = idx + 1;
       const clean = l.replace(/^\d+\.\s*/, "");
       return `${n}. ${clean || ""}`.trimEnd();
     });
     const insertText = numbered.join("\n");
-
     const next = value.slice(0, start) + insertText + value.slice(end);
     setFormData((prev) => ({ ...prev, description: next }));
-
     requestAnimationFrame(() => {
       el.focus();
-      const newPos = start + insertText.length;
-      el.setSelectionRange(newPos, newPos);
+      el.setSelectionRange(start + insertText.length, start + insertText.length);
     });
   };
 
@@ -151,17 +132,15 @@ const HotelManagement = () => {
       if (editingHotel) {
         await hotelService.updateHotel(editingHotel._id, formData);
         hotelId = editingHotel._id;
-        setSuccess('Hotel updated successfully!');
+        setSuccess('Hotel updated successfully');
       } else {
         const response = await hotelService.createHotel(formData);
         hotelId = response.data._id;
-        setSuccess('Hotel created successfully!');
+        setSuccess('Hotel created successfully');
       }
 
-      // Upload images if selected
       if (selectedImages.length > 0) {
         await hotelService.uploadHotelImages(hotelId, selectedImages);
-        setSuccess('Hotel and images uploaded successfully!');
       }
 
       setFormData({ name: '', location: '', description: '' });
@@ -182,18 +161,15 @@ const HotelManagement = () => {
       description: hotel.description || '',
     });
     setShowForm(true);
-    // Scroll to top smoothly so user sees the form
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleDelete = async (hotelId) => {
-    if (!window.confirm('Are you sure you want to delete this hotel?')) {
-      return;
-    }
+    if (!window.confirm('Are you sure you want to delete this hotel?')) return;
 
     try {
       await hotelService.deleteHotel(hotelId);
-      setSuccess('Hotel deleted successfully!');
+      setSuccess('Hotel deleted successfully');
       fetchHotels();
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to delete hotel');
@@ -208,205 +184,184 @@ const HotelManagement = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F4F7FE] text-gray-800 p-4 md:p-8 font-sans">
-      <div className="max-w-7xl mx-auto">
-        
-        {/* Header & Global Actions */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
+    <div className="min-h-screen bg-white">
+      <div className="max-w-7xl mx-auto px-6 py-8">
+
+        {/* Header */}
+        <div className="flex items-center justify-between mb-12 pb-6 border-b border-gray-100">
           <div>
-            <button 
-              onClick={() => navigate('/owner-dashboard')} 
-              className="text-sm text-gray-500 hover:text-gray-900 mb-2 flex items-center gap-2 transition-colors font-medium"
+            <button
+              onClick={() => navigate('/owner-dashboard')}
+              className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 mb-3 transition-colors"
             >
-              ← Back to Dashboard
+              <ArrowLeft className="w-4 h-4" />
+              Back to Dashboard
             </button>
-            <h1 className="text-3xl font-bold text-gray-900">Hotel Management</h1>
+            <h1 className="text-3xl font-semibold text-gray-900">Hotel Management</h1>
           </div>
-          
+
           <button
-            className={`px-6 py-3 font-semibold rounded-full shadow-sm transition-all flex items-center gap-2 ${
-              showForm 
-                ? 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50' 
-                : 'bg-[#0B0F19] text-white hover:bg-black'
-            }`}
             onClick={() => {
-              handleCancel();
+              if (showForm) handleCancel();
               setShowForm(!showForm);
             }}
+            className={`inline-flex items-center gap-2 px-6 py-2.5 rounded-lg font-medium transition-all ${
+              showForm
+                ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                : 'bg-gray-900 text-white hover:bg-gray-800'
+            }`}
           >
-            {showForm ? '✕ Cancel' : '+ Add New Hotel'}
+            {showForm ? (
+              <>
+                <X className="w-4 h-4" />
+                Cancel
+              </>
+            ) : (
+              <>
+                <Plus className="w-4 h-4" />
+                Add Hotel
+              </>
+            )}
           </button>
         </div>
 
         <ErrorAlert message={error} onClose={() => setError('')} />
         <SuccessAlert message={success} onClose={() => setSuccess('')} />
 
-        {/* Dynamic Add/Edit Form */}
+        {/* Form */}
         {showForm && (
-          <div className="bg-white rounded-[2rem] p-6 md:p-10 shadow-sm mb-10 transition-all">
-            <div className="mb-8">
-              <h3 className="text-2xl font-bold text-gray-900">
-                {editingHotel ? 'Edit Hotel Details' : 'Create New Hotel'}
-              </h3>
-              <p className="text-gray-500 text-sm mt-1">Fill in the information below to manage your property.</p>
-            </div>
+          <div className="bg-gray-50 rounded-2xl p-8 mb-12 border border-gray-100">
+            <h2 className="text-xl font-semibold text-gray-900 mb-6">
+              {editingHotel ? 'Edit Hotel' : 'New Hotel'}
+            </h2>
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-1.5">
-                    Hotel Name *
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Hotel Name
                   </label>
                   <input
                     type="text"
-                    id="name"
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
-                    placeholder="e.g. The Grand Plaza"
+                    placeholder="Enter hotel name"
                     required
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 text-sm focus:ring-2 focus:ring-[#0B0F19] focus:border-transparent outline-none transition-all"
+                    className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="location" className="block text-sm font-semibold text-gray-700 mb-1.5">
-                    Location *
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Location
                   </label>
                   <input
                     type="text"
-                    id="location"
                     name="location"
                     value={formData.location}
                     onChange={handleInputChange}
-                    placeholder="e.g. New York, NY"
+                    placeholder="Enter location"
                     required
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 text-sm focus:ring-2 focus:ring-[#0B0F19] focus:border-transparent outline-none transition-all"
+                    className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
                   />
                 </div>
               </div>
 
               <div>
-                <label htmlFor="description" className="block text-sm font-semibold text-gray-700 mb-1.5">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   Description
                 </label>
-                <div className="flex flex-wrap items-center gap-2 mb-2">
+                <div className="flex flex-wrap items-center gap-2 mb-3">
                   <button
                     type="button"
                     onClick={() => applyToSelection({ prefix: "**", suffix: "**" })}
-                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 text-xs font-semibold"
-                    title="Bold"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 text-xs"
                   >
-                    <Bold className="w-4 h-4" />
-                    Bold
+                    <Bold className="w-3.5 h-3.5" />
                   </button>
                   <button
                     type="button"
                     onClick={() => applyToSelection({ prefix: "*", suffix: "*" })}
-                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 text-xs font-semibold"
-                    title="Italic"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 text-xs"
                   >
-                    <Italic className="w-4 h-4" />
-                    Italic
+                    <Italic className="w-3.5 h-3.5" />
                   </button>
                   <button
                     type="button"
                     onClick={makeBullets}
-                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 text-xs font-semibold"
-                    title="Bullet list"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 text-xs"
                   >
-                    <List className="w-4 h-4" />
-                    Bullets
+                    <List className="w-3.5 h-3.5" />
                   </button>
                   <button
                     type="button"
                     onClick={makeNumbered}
-                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 text-xs font-semibold"
-                    title="Numbered list"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 text-xs"
                   >
-                    <ListOrdered className="w-4 h-4" />
-                    Numbered
+                    <ListOrdered className="w-3.5 h-3.5" />
                   </button>
-
-                  <div className="h-6 w-px bg-gray-200 mx-1" />
-
+                  <div className="h-4 w-px bg-gray-200" />
                   <button
                     type="button"
                     onClick={() => insertAtCursor(":wifi:")}
-                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 text-xs font-semibold"
-                    title="Insert WiFi icon"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 text-xs"
                   >
-                    <Wifi className="w-4 h-4 text-blue-600" />
-                    WiFi
+                    <Wifi className="w-3.5 h-3.5" />
                   </button>
                   <button
                     type="button"
                     onClick={() => insertAtCursor(":breakfast:")}
-                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 text-xs font-semibold"
-                    title="Insert Breakfast icon"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 text-xs"
                   >
-                    <Coffee className="w-4 h-4 text-amber-600" />
-                    Breakfast
+                    <Coffee className="w-3.5 h-3.5" />
                   </button>
                   <button
                     type="button"
                     onClick={() => insertAtCursor(":pool:")}
-                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 text-xs font-semibold"
-                    title="Insert Pool icon"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 text-xs"
                   >
-                    <Waves className="w-4 h-4 text-cyan-600" />
-                    Pool
+                    <Waves className="w-3.5 h-3.5" />
                   </button>
                 </div>
                 <textarea
-                  id="description"
                   name="description"
                   value={formData.description}
                   onChange={handleInputChange}
-                  placeholder="Describe your property, amenities, and unique features..."
+                  placeholder="Describe your hotel..."
                   rows="4"
                   ref={descriptionRef}
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 text-sm focus:ring-2 focus:ring-[#0B0F19] focus:border-transparent outline-none transition-all resize-none"
+                  className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent resize-none"
                 />
-                <p className="text-xs text-gray-500 mt-2">
-                  Tip: Use bullets with <span className="font-semibold">-</span> and insert icons with
-                  <span className="font-mono"> :wifi: :breakfast: :pool:</span>
-                </p>
               </div>
 
               <div>
-                <label htmlFor="images" className="block text-sm font-semibold text-gray-700 mb-1.5">
-                  Hotel Images
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Images
                 </label>
-                <div className="flex items-center gap-4">
-                  <input
-                    type="file"
-                    id="images"
-                    name="images"
-                    multiple
-                    accept="image/*"
-                    onChange={handleFileChange}
-                    className="block w-full text-sm text-gray-500 file:mr-4 file:py-2.5 file:px-5 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200 transition-all cursor-pointer"
-                  />
-                  {selectedImages.length > 0 && (
-                    <span className="shrink-0 px-3 py-1 bg-green-50 text-green-600 text-xs font-bold rounded-full">
-                      ✓ {selectedImages.length} selected
-                    </span>
-                  )}
-                </div>
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border file:border-gray-200 file:text-sm file:bg-white file:text-gray-700 hover:file:bg-gray-50"
+                />
+                {selectedImages.length > 0 && (
+                  <p className="mt-2 text-xs text-gray-500">{selectedImages.length} file(s) selected</p>
+                )}
               </div>
 
-              <div className="flex flex-col sm:flex-row justify-end items-center gap-3 pt-8 mt-4 border-t border-gray-100">
-                <button 
-                  type="button" 
-                  onClick={handleCancel} 
-                  className="w-full sm:w-auto px-6 py-2.5 bg-white text-gray-700 font-semibold rounded-full hover:bg-gray-50 transition-colors"
+              <div className="flex justify-end gap-3 pt-4">
+                <button
+                  type="button"
+                  onClick={handleCancel}
+                  className="px-5 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50"
                 >
                   Cancel
                 </button>
-                <button 
-                  type="submit" 
-                  className="w-full sm:w-auto px-8 py-2.5 bg-[#0B0F19] text-white font-semibold rounded-full hover:bg-black transition-colors shadow-sm"
+                <button
+                  type="submit"
+                  className="px-5 py-2.5 text-sm font-medium text-white bg-gray-900 rounded-lg hover:bg-gray-800"
                 >
                   {editingHotel ? 'Update Hotel' : 'Create Hotel'}
                 </button>
@@ -415,131 +370,90 @@ const HotelManagement = () => {
           </div>
         )}
 
-        {/* Hotels Grid Section */}
+        {/* Hotels Grid */}
         {loading ? (
-          <div className="flex justify-center items-center py-20">
+          <div className="flex justify-center py-20">
             <Loading message="Loading hotels..." />
           </div>
         ) : hotels.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {hotels.map((hotel) => (
-              
-              /* Redesigned Card Matching Reference Image */
-              <div 
-                key={hotel._id} 
-                className="bg-white rounded-[2rem] overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300 flex flex-col h-full"
+              <div
+                key={hotel._id}
+                className="group bg-white border border-gray-100 rounded-xl overflow-hidden hover:border-gray-200 transition-colors"
               >
-                {/* Image Top Half */}
-                <div className="h-64 relative w-full bg-gray-100">
+                {/* Image */}
+                <div className="h-48 bg-gray-50 flex items-center justify-center">
                   {hotel.images && hotel.images.length > 0 ? (
-                    <div className="relative w-full h-full">
-                      {/* Main image */}
-                      <img 
-                        src={hotel.images[0].startsWith('http') ? hotel.images[0] : `${API_BASE_URL}${hotel.images[0]}`} 
-                        alt={hotel.name} 
-                        className="w-full h-full object-cover"
-                      />
-                      
-                      {/* Image gallery overlay for multiple images */}
-                      {hotel.images.length > 1 && (
-                        <div className="absolute bottom-3 right-3 flex gap-1">
-                          {hotel.images.slice(1, 4).map((image, index) => (
-                            <img
-                              key={index}
-                              src={image.startsWith('http') ? image : `${API_BASE_URL}${image}`}
-                              alt={`${hotel.name} ${index + 2}`}
-                              className="w-10 h-10 object-cover rounded border-2 border-white shadow-sm"
-                            />
-                          ))}
-                          {hotel.images.length > 4 && (
-                            <div className="w-10 h-10 bg-black/70 rounded flex items-center justify-center text-white text-xs font-medium">
-                              +{hotel.images.length - 4}
-                            </div>
-                          )}
-                        </div>
-                      )}
-                    </div>
+                    <img
+                      src={hotel.images[0]}
+                      alt={hotel.name}
+                      className="w-full h-full object-cover"
+                    />
                   ) : (
-                    <div className="w-full h-full flex flex-col items-center justify-center text-gray-300">
-                      <span className="text-5xl mb-2 block">🏨</span>
-                      <span className="text-sm font-medium">No Image</span>
-                    </div>
+                    <div className="text-4xl text-gray-300">🏨</div>
                   )}
                 </div>
 
-                {/* Content Bottom Half */}
-                <div className="p-6 flex flex-col flex-1">
-                  
-                  {/* Title & Location Row */}
-                  <div className="flex justify-between items-start gap-4 mb-2">
-                    <h3 className="text-lg font-bold text-gray-900 leading-tight line-clamp-1">
+                {/* Content */}
+                <div className="p-5">
+                  <div className="mb-3">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-1">
                       {hotel.name}
                     </h3>
-                    {/* The Location takes the place of the Price in the reference */}
-                    <span className="text-sm font-bold text-gray-900 shrink-0">
+                    <p className="text-sm text-gray-500">
                       {hotel.location}
-                    </span>
+                    </p>
                   </div>
 
-                  {/* Description Paragraph */}
-                  <p className="text-sm text-gray-400 line-clamp-3 mb-6 flex-1 leading-relaxed">
-                    {hotel.description || 'A beautiful futuristic and sculptural masterpiece blending elegant functionality.'}
+                  <p className="text-sm text-gray-600 mb-5 line-clamp-2 min-h-[2.5rem]">
+                    {hotel.description || 'No description available'}
                   </p>
 
-                  {/* Footer Actions */}
-                  <div className="flex justify-between items-center mt-auto">
-                    
-                    {/* Secondary Actions (Edit/Delete) */}
-                    <div className="flex items-center gap-4">
+                  {/* Actions */}
+                  <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                    <div className="flex items-center gap-3">
                       <button
                         onClick={() => handleEdit(hotel)}
-                        className="text-sm font-medium text-gray-400 hover:text-gray-900 transition-colors"
+                        className="text-sm text-gray-500 hover:text-gray-900 transition-colors inline-flex items-center gap-1.5"
                       >
+                        <Edit2 className="w-3.5 h-3.5" />
                         Edit
                       </button>
                       <button
                         onClick={() => handleDelete(hotel._id)}
-                        className="text-sm font-medium text-gray-400 hover:text-red-500 transition-colors"
+                        className="text-sm text-gray-500 hover:text-red-600 transition-colors inline-flex items-center gap-1.5"
                       >
+                        <Trash2 className="w-3.5 h-3.5" />
                         Delete
                       </button>
                     </div>
-                    
-                    {/* Primary Action Button (Matches the black "Buy" pill) */}
                     <button
                       onClick={() => navigate(`/rooms/${hotel._id}`)}
-                      className="bg-[#0B0F19] text-white px-6 py-2 rounded-full text-sm font-medium hover:bg-black transition-transform active:scale-95"
+                      className="inline-flex items-center gap-1.5 px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors"
                     >
+                      <Settings className="w-3.5 h-3.5" />
                       Manage
                     </button>
-
                   </div>
                 </div>
               </div>
-              /* End Card */
-
             ))}
           </div>
         ) : (
-          /* Empty State */
-          <div className="bg-white rounded-[2rem] p-12 text-center border-2 border-dashed border-gray-200 mt-8">
-            <span className="text-5xl mb-4 block text-gray-300">🏢</span>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">No hotels found</h3>
-            <p className="text-gray-500 mb-6 max-w-md mx-auto">
-              You haven't created any properties yet. Add your first hotel to start managing rooms and bookings.
-            </p>
+          <div className="text-center py-20">
+            <div className="text-6xl text-gray-200 mb-4">🏨</div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">No hotels yet</h3>
+            <p className="text-gray-500 mb-6">Get started by adding your first hotel</p>
             <button
-              className="px-8 py-3 bg-[#0B0F19] text-white font-semibold rounded-full shadow-sm hover:bg-black transition-all"
-              onClick={() => {
-                handleCancel();
-                setShowForm(true);
-              }}
+              onClick={() => setShowForm(true)}
+              className="inline-flex items-center gap-2 px-6 py-2.5 bg-gray-900 text-white font-medium rounded-lg hover:bg-gray-800"
             >
-              + Create First Hotel
+              <Plus className="w-4 h-4" />
+              Add Hotel
             </button>
           </div>
         )}
-        
       </div>
     </div>
   );

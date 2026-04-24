@@ -205,24 +205,20 @@ export const uploadRoomImages = async (req, res) => {
       return res.status(400).json({ message: "No files uploaded" });
     }
 
-    // Validate files
-    const maxFileSize = 5 * 1024 * 1024; // 5MB
-    for (const file of req.files) {
-      if (file.size > maxFileSize) {
-        return res.status(400).json({ 
-          message: `File ${file.originalname} is too large. Maximum size is 5MB` 
-        });
-      }
-    }
-
-    const imagePaths = req.files.map((file) => `/uploads/rooms/${file.filename}`);
-    room.images = [...room.images, ...imagePaths];
+    // Extract Cloudinary URLs from uploaded files
+    const imageUrls = req.files.map((file) => file.path);
+    room.images = [...room.images, ...imageUrls];
     await room.save();
+    
     res.status(200).json({
       message: "Images uploaded successfully",
       images: room.images,
     });
   } catch (error) {
-    res.status(500).json({ message: "Failed to upload images", error });
+    console.error('Room image upload error:', error);
+    res.status(500).json({ 
+      message: "Failed to upload images", 
+      error: error.message 
+    });
   }
 };

@@ -9,6 +9,7 @@ import {
 } from "../Controllers/RoomsController.js";
 import express from "express";
 import protect, { authorizeRoles } from "../Middlewares/auth.js";
+import { handleUploadError, validateImageUpload } from "../middleware/uploadErrorHandler.js";
 
 const router = express.Router();
 
@@ -39,6 +40,6 @@ router.delete("/:id/:roomId", protect, authorizeRoles("Owner"), deleteRoom);
 // Upload room images
 router.post("/:id/:roomId/upload-images", protect, authorizeRoles("Owner"), (req, res, next) => {
   req.roomUpload.array("images", 10)(req, res, next);
-}, uploadRoomImages);
+}, handleUploadError, validateImageUpload, uploadRoomImages);
 
 export default router;

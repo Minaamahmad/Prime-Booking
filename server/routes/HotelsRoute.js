@@ -2,6 +2,7 @@ import {  createHotel,getHotelById,getHotels, publicHotels, getPopularHotels } f
 import { updateHotel,deleteHotel, uploadHotelImages } from "../Controllers/HotelsController.js";
 import express from "express";
 import protect, {authorizeRoles} from "../Middlewares/auth.js";
+import { handleUploadError, validateImageUpload } from "../middleware/uploadErrorHandler.js";
 
 const router = express.Router();
 
@@ -16,7 +17,7 @@ router.put("/:id", protect,authorizeRoles("Owner"), updateHotel);
 router.delete("/:id", protect,authorizeRoles("Owner"),  deleteHotel); 
 router.post("/:id/upload-images", protect,authorizeRoles("Owner"), (req, res, next) => {
   req.hotelUpload.array("images", 10)(req, res, next);
-}, uploadHotelImages);
+}, handleUploadError, validateImageUpload, uploadHotelImages);
 router.get("/:id",getHotelById)
 router.get("/popular", getPopularHotels);
 router.get("/", publicHotels);

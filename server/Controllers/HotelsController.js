@@ -67,8 +67,7 @@ export const getHotelById = async (req, res) => {
       return res.status(404).json({ message: "Hotel not found" });
     }
     // Increment popularity on view
-    hotel.popularity += 1;
-    await hotel.save();
+    await Hotels.findByIdAndUpdate(req.params.id, { $inc: { popularity: 1 } });
     res.status(200).json(hotel);
   } catch (error) {
     res.status(500).json({ message: "Failed to retrieve hotel", error });
@@ -128,24 +127,20 @@ export const uploadHotelImages = async (req, res) => {
       return res.status(400).json({ message: "No files uploaded" });
     }
 
-    // Validate files
-    const maxFileSize = 5 * 1024 * 1024; // 5MB
-    for (const file of req.files) {
-      if (file.size > maxFileSize) {
-        return res.status(400).json({ 
-          message: `File ${file.originalname} is too large. Maximum size is 5MB` 
-        });
-      }
-    }
-
-    const imagePaths = req.files.map((file) => `/uploads/hotels/${file.filename}`);
-    hotel.images = [...hotel.images, ...imagePaths];
+    // Extract Cloudinary URLs from uploaded files
+    const imageUrls = req.files.map((file) => file.path);
+    hotel.images = [...hotel.images, ...imageUrls];
     await hotel.save();
+    
     res.status(200).json({
       message: "Images uploaded successfully",
       images: hotel.images,
     });
   } catch (error) {
-    res.status(500).json({ message: "Failed to upload images", error });
+    console.error('Hotel image upload error:', error);
+    res.status(500).json({ 
+      message: "Failed to upload images", 
+      error: error.message 
+    });
   }
 };

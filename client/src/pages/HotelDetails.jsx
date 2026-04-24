@@ -209,7 +209,10 @@ const HotelDetails = () => {
                 <img
                   alt={hotel.name}
                   className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110"
-                  src={`${API_BASE_URL}${hotel.images[0]}`}
+                  src={hotel.images[0]?.startsWith('http') ? hotel.images[0] : `${API_BASE_URL}${hotel.images[0]}`}
+                  onError={(e) => {
+                    e.target.src = 'https://via.placeholder.com/800x400?text=Hotel';
+                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </div>
@@ -219,7 +222,10 @@ const HotelDetails = () => {
                   <img
                     alt={`${hotel.name} ${idx + 2}`}
                     className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110"
-                    src={`${API_BASE_URL}${image}`}
+                    src={image.startsWith('http') ? image : `${API_BASE_URL}${image}`}
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                    }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
@@ -290,7 +296,9 @@ const HotelDetails = () => {
                   <div className="flex flex-col gap-4">
                     {rooms.map((room) => {
                       const firstImage = room.images?.[0]
-                        ? `${API_BASE_URL}${room.images[0]}`
+                        ? room.images[0].startsWith('http') 
+                          ? room.images[0] 
+                          : `${API_BASE_URL}${room.images[0]}`
                         : "https://via.placeholder.com/200x160?text=Room";
                       const isSelected = selectedRoom?._id === room._id;
                       const isUnavailable = room.total_stock === 0;

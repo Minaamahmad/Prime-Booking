@@ -55,9 +55,12 @@ const Home = () => {
               <SwiperSlide key={hotel._id}>
                 <div className="relative h-full w-full">
                   <img 
-                    src={hotel.image || hotel.images?.[0]} 
+                    src={hotel.images?.[0] || 'https://via.placeholder.com/800x400?text=Hotel'} 
                     alt={hotel.name}
                     className="absolute inset-0 w-full h-full object-cover"
+                    onError={(e) => {
+                      e.target.src = 'https://via.placeholder.com/800x400?text=Hotel';
+                    }}
                   />
                   {/* Overlay for text readability */}
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-80" />

@@ -296,9 +296,13 @@ const RoomManagement = () => {
                     <div className="relative w-full h-full">
                       {/* Main image */}
                       <img 
-                        src={room.images[0].startsWith('http') ? room.images[0] : `${API_BASE_URL}${room.images[0]}`} 
+                        src={room.images[0]} 
                         alt={`${room.type} Room`} 
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        onError={(e) => {
+                          e.target.src = '/api/placeholder/400/300';
+                          e.target.onerror = null;
+                        }}
                       />
                       
                       {/* Image gallery overlay for multiple images */}
@@ -307,9 +311,12 @@ const RoomManagement = () => {
                           {room.images.slice(1, 4).map((image, index) => (
                             <img
                               key={index}
-                              src={image.startsWith('http') ? image : `${API_BASE_URL}${image}`}
+                              src={image}
                               alt={`${room.type} Room ${index + 2}`}
                               className="w-8 h-8 object-cover rounded border-2 border-white shadow-sm"
+                              onError={(e) => {
+                                e.target.style.display = 'none';
+                              }}
                             />
                           ))}
                           {room.images.length > 4 && (

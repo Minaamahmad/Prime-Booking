@@ -16,6 +16,8 @@ import messagesrouter from "./routes/MessagesRoute.js";
 import "./config/passport.js";
 import cookieParser from "cookie-parser";
 import googlAuthrouter from "./Controllers/googleauth.js";
+import { cloudinary } from "./config/cloudinary.js";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
 
 const app = express();
 const server = http.createServer(app);
@@ -43,28 +45,14 @@ mongoose
     console.error("Error connecting to MongoDB:", err);
   });
 
-
-const uploadsDir = path.join(__dirname, "uploads");
-const hotelsDir = path.join(uploadsDir, "hotels");
-const roomsDir = path.join(uploadsDir, "rooms");
-
-if (!fs.existsSync(hotelsDir)) {
-  fs.mkdirSync(hotelsDir, { recursive: true });
-}
-if (!fs.existsSync(roomsDir)) {
-  fs.mkdirSync(roomsDir, { recursive: true });
-}
-
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-
-const hotelStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, hotelsDir);
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, uniqueSuffix + path.extname(file.originalname));
-  },
+// Cloudinary multer storage configuration
+const hotelStorage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: 'hotels',
+    allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'webp'],
+    transformation: [{ width: 1200, height: 800, crop: 'limit' }]
+  }
 });
 
 const hotelUpload = multer({
@@ -79,14 +67,13 @@ const hotelUpload = multer({
   },
 });
 
-const roomStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, roomsDir);
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, uniqueSuffix + path.extname(file.originalname));
-  },
+const roomStorage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: 'rooms',
+    allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'webp'],
+    transformation: [{ width: 1200, height: 800, crop: 'limit' }]
+  }
 });
 
 const roomUpload = multer({
@@ -103,8 +90,6 @@ const roomUpload = multer({
 
 app.uploadHotel = hotelUpload;
 app.uploadRoom = roomUpload;
-
-
 
 const io = new Server(server, {
   cors: {
