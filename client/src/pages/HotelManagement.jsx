@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { hotelService } from '../services/api';
 import ErrorAlert from '../components/ErrorAlert';
 import SuccessAlert from '../components/SuccessAlert';
 import Loading from '../components/Loading';
+import { Bold, Italic, List, ListOrdered, Wifi, Coffee, Waves } from "lucide-react";
 
 const HotelManagement = () => {
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ const HotelManagement = () => {
     location: '',
     description: '',
   });
+  const descriptionRef = useRef(null);
   const[selectedImages, setSelectedImages] = useState([]);
 
   // Base URL for images if they are stored as relative paths on your backend
@@ -46,6 +48,91 @@ const HotelManagement = () => {
       ...prev,
       [name]: value,
     }));
+  };
+
+  const applyToSelection = ({ prefix = "", suffix = "" }) => {
+    const el = descriptionRef.current;
+    if (!el) return;
+    const start = el.selectionStart ?? 0;
+    const end = el.selectionEnd ?? 0;
+    const value = el.value ?? "";
+    const selected = value.slice(start, end);
+
+    const next = value.slice(0, start) + prefix + selected + suffix + value.slice(end);
+    setFormData((prev) => ({ ...prev, description: next }));
+
+    requestAnimationFrame(() => {
+      el.focus();
+      const cursorStart = start + prefix.length;
+      const cursorEnd = end + prefix.length;
+      el.setSelectionRange(cursorStart, cursorEnd);
+    });
+  };
+
+  const insertAtCursor = (text) => {
+    const el = descriptionRef.current;
+    if (!el) return;
+    const start = el.selectionStart ?? 0;
+    const end = el.selectionEnd ?? 0;
+    const value = el.value ?? "";
+    const next = value.slice(0, start) + text + value.slice(end);
+    setFormData((prev) => ({ ...prev, description: next }));
+
+    requestAnimationFrame(() => {
+      el.focus();
+      const pos = start + text.length;
+      el.setSelectionRange(pos, pos);
+    });
+  };
+
+  const makeBullets = () => {
+    const el = descriptionRef.current;
+    if (!el) return;
+    const start = el.selectionStart ?? 0;
+    const end = el.selectionEnd ?? 0;
+    const value = el.value ?? "";
+    const selected = value.slice(start, end);
+
+    const lines = (selected || "").split("\n");
+    const hasSelection = end > start;
+    const bulletLines = (hasSelection ? lines : [""]).map((l) => (l.trim().length ? `- ${l.replace(/^-+\s*/, "")}` : "- "));
+    const insertText = bulletLines.join("\n");
+
+    const next = value.slice(0, start) + insertText + value.slice(end);
+    setFormData((prev) => ({ ...prev, description: next }));
+
+    requestAnimationFrame(() => {
+      el.focus();
+      const newPos = start + insertText.length;
+      el.setSelectionRange(newPos, newPos);
+    });
+  };
+
+  const makeNumbered = () => {
+    const el = descriptionRef.current;
+    if (!el) return;
+    const start = el.selectionStart ?? 0;
+    const end = el.selectionEnd ?? 0;
+    const value = el.value ?? "";
+    const selected = value.slice(start, end);
+    const lines = (selected || "").split("\n");
+    const hasSelection = end > start;
+
+    const numbered = (hasSelection ? lines : [""]).map((l, idx) => {
+      const n = idx + 1;
+      const clean = l.replace(/^\d+\.\s*/, "");
+      return `${n}. ${clean || ""}`.trimEnd();
+    });
+    const insertText = numbered.join("\n");
+
+    const next = value.slice(0, start) + insertText + value.slice(end);
+    setFormData((prev) => ({ ...prev, description: next }));
+
+    requestAnimationFrame(() => {
+      el.focus();
+      const newPos = start + insertText.length;
+      el.setSelectionRange(newPos, newPos);
+    });
   };
 
   const handleFileChange = (e) => {
@@ -203,6 +290,74 @@ const HotelManagement = () => {
                 <label htmlFor="description" className="block text-sm font-semibold text-gray-700 mb-1.5">
                   Description
                 </label>
+                <div className="flex flex-wrap items-center gap-2 mb-2">
+                  <button
+                    type="button"
+                    onClick={() => applyToSelection({ prefix: "**", suffix: "**" })}
+                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 text-xs font-semibold"
+                    title="Bold"
+                  >
+                    <Bold className="w-4 h-4" />
+                    Bold
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => applyToSelection({ prefix: "*", suffix: "*" })}
+                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 text-xs font-semibold"
+                    title="Italic"
+                  >
+                    <Italic className="w-4 h-4" />
+                    Italic
+                  </button>
+                  <button
+                    type="button"
+                    onClick={makeBullets}
+                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 text-xs font-semibold"
+                    title="Bullet list"
+                  >
+                    <List className="w-4 h-4" />
+                    Bullets
+                  </button>
+                  <button
+                    type="button"
+                    onClick={makeNumbered}
+                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 text-xs font-semibold"
+                    title="Numbered list"
+                  >
+                    <ListOrdered className="w-4 h-4" />
+                    Numbered
+                  </button>
+
+                  <div className="h-6 w-px bg-gray-200 mx-1" />
+
+                  <button
+                    type="button"
+                    onClick={() => insertAtCursor(":wifi:")}
+                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 text-xs font-semibold"
+                    title="Insert WiFi icon"
+                  >
+                    <Wifi className="w-4 h-4 text-blue-600" />
+                    WiFi
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => insertAtCursor(":breakfast:")}
+                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 text-xs font-semibold"
+                    title="Insert Breakfast icon"
+                  >
+                    <Coffee className="w-4 h-4 text-amber-600" />
+                    Breakfast
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => insertAtCursor(":pool:")}
+                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 text-xs font-semibold"
+                    title="Insert Pool icon"
+                  >
+                    <Waves className="w-4 h-4 text-cyan-600" />
+                    Pool
+                  </button>
+                </div>
                 <textarea
                   id="description"
                   name="description"
@@ -210,8 +365,13 @@ const HotelManagement = () => {
                   onChange={handleInputChange}
                   placeholder="Describe your property, amenities, and unique features..."
                   rows="4"
+                  ref={descriptionRef}
                   className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 text-sm focus:ring-2 focus:ring-[#0B0F19] focus:border-transparent outline-none transition-all resize-none"
                 />
+                <p className="text-xs text-gray-500 mt-2">
+                  Tip: Use bullets with <span className="font-semibold">-</span> and insert icons with
+                  <span className="font-mono"> :wifi: :breakfast: :pool:</span>
+                </p>
               </div>
 
               <div>
