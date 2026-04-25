@@ -4,16 +4,16 @@ import { hotelService } from '../services/api';
 import HotelCard from '../components/HotelCard';
 import Loading from '../components/Loading';
 import ErrorAlert from '../components/ErrorAlert';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Pagination } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/pagination';
+import { Search, MapPin, Wifi, Car, Coffee, Star } from 'lucide-react';
 
 const Home = () => {
+  const BLOCKED_HOTEL_NAMES = new Set(['sunset paradise resort']);
+  const BLOCKED_HOTEL_LOCATIONS = new Set(['malibu, california']);
+
   const [hotels, setHotels] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [searchLocation, setSearchLocation] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     fetchHotels();
@@ -24,7 +24,12 @@ const Home = () => {
       setLoading(true);
       setError('');
       const response = await hotelService.getAllHotels();
-      setHotels(response.data);
+      const sanitizedHotels = (Array.isArray(response.data) ? response.data : []).filter((hotel) => {
+        const name = (hotel?.name || '').trim().toLowerCase();
+        const location = (hotel?.location || '').trim().toLowerCase();
+        return !BLOCKED_HOTEL_NAMES.has(name) && !BLOCKED_HOTEL_LOCATIONS.has(location);
+      });
+      setHotels(sanitizedHotels);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to load hotels');
     } finally {
@@ -32,98 +37,183 @@ const Home = () => {
     }
   };
 
-  const filteredHotels = hotels.filter((hotel) =>
-    searchLocation === '' ||
-    hotel.location.toLowerCase().includes(searchLocation.toLowerCase()) ||
-    hotel.name.toLowerCase().includes(searchLocation.toLowerCase())
-  );
+  const normalizedQuery = searchQuery.trim().toLowerCase();
+  const filteredHotels = hotels.filter((hotel) => {
+    if (!normalizedQuery) return true;
+    const name = (hotel?.name || '').toLowerCase();
+    const location = (hotel?.location || '').toLowerCase();
+    return name.includes(normalizedQuery) || location.includes(normalizedQuery);
+  });
+
+  const featuredHotels = filteredHotels.slice(0, 3);
+  const remainingHotels = filteredHotels.slice(3);
 
   return (
-    <div className="div">
-
-       <div className="  fixed top-14 left-0 right-0 h-90 wd-20 bg-red-600  ">
- 
-       <section className="w-full h-[400px] bg-slate-900 overflow-hidden">
-        {filteredHotels.length > 0 ? (
-          <Swiper
-            modules={[Autoplay, Pagination]}
-            autoplay={{ delay: 8000, disableOnInteraction: false }}
-            pagination={{ clickable: true }}
-            className="h-full w-full"
-          >
-            {filteredHotels.slice(0, 5).map((hotel) => (
-              <SwiperSlide key={hotel._id}>
-                <div className="relative h-full w-full">
-                  <img 
-                    src={hotel.images?.[0] || 'https://via.placeholder.com/800x400?text=Hotel'} 
-                    alt={hotel.name}
-                    className="absolute inset-0 w-full h-full object-cover"
-                    onError={(e) => {
-                      e.target.src = 'https://via.placeholder.com/800x400?text=Hotel';
-                    }}
-                  />
-                  {/* Overlay for text readability */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-80" />
-                  <div className="absolute bottom-12 left-10 text-white">
-                    <h2 className="text-4xl font-bold">{hotel.name}</h2>
-                    <p className="text-lg text-slate-300">{hotel.location}</p>
-                  </div>
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        ) : (
-          <div className="h-full w-full bg-slate-900 animate-pulse flex items-center justify-center text-slate-500">
-            Loading Highlights...
+    <div className="min-h-screen bg-gray-50">
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
+        <div className="rounded-3xl border border-gray-200 bg-white p-6 shadow-md sm:p-10">
+          <div className="mx-auto max-w-3xl text-center">
+            <h1 className="mt-6 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">Find your perfect stay</h1>
+            <p className="mt-4 text-base leading-relaxed text-gray-600 sm:text-lg">
+              Discover clean, comfortable hotels with modern amenities and reliable service.
+            </p>
           </div>
-        )}
-       </section>
 
-       <div className="w-full px-4 mt-10 mb-8"> 
-  <div className="max-w-4xl mx-auto">
-    <label htmlFor="hotel-search" className="sr-only">Search hotels</label>
-    <div className="relative group">
-      <input
-        id="hotel-search"
-        type="text"
-        placeholder="Search location or hotel"
-        value={searchLocation}
-        onChange={(e) => setSearchLocation(e.target.value)}
-       
-        
-        className="w-full  border border-white/10 bg-slate-900/90 backdrop-blur-md px-8 py-5 text-lg text-slate-100 placeholder:text-slate-500 outline-none focus:border-primary-teal focus:ring-4 focus:ring-primary-teal/10 transition-all shadow-2xl"
-      />
-      
-     
-      <div className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary-teal transition">
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-        </svg>
+          <div className="mx-auto mt-8 max-w-3xl">
+            <div className="flex w-full items-center gap-3 rounded-xl border border-gray-300 bg-gray-50 px-4 py-3">
+              <MapPin className="h-5 w-5 shrink-0 text-indigo-500" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search by hotel name or city (e.g., Islamabad)"
+                className="w-full border-0 bg-transparent px-1 py-2 text-base text-gray-900 outline-none placeholder:text-gray-400"
+              />
+              {searchQuery ? (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-600 transition hover:bg-gray-100"
+                >
+                  Clear
+                </button>
+              ) : null}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Error Alert */}
+      {error && (
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4">
+          <ErrorAlert message={error} onClose={() => setError('')} />
+        </div>
+      )}
+
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+        <div className="grid grid-cols-2 gap-4 rounded-3xl border border-gray-200 bg-white p-6 sm:grid-cols-4 sm:p-8">
+          {[
+            { icon: Star, title: 'Premium Quality', desc: 'Verified properties' },
+            { icon: Wifi, title: 'Modern Amenities', desc: 'Comfort-first stays' },
+            { icon: Coffee, title: 'Great Service', desc: 'Friendly support' },
+            { icon: Car, title: 'Easy Access', desc: 'Convenient locations' },
+          ].map((item) => (
+            <div key={item.title} className="text-center">
+              <div className="mx-auto mb-3 inline-flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100">
+                <item.icon className="h-6 w-6 text-indigo-600" />
+              </div>
+              <h3 className="text-sm font-bold text-gray-900">{item.title}</h3>
+              <p className="text-xs text-gray-500">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Featured Properties */}
+      {!searchQuery && featuredHotels.length > 0 && (
+        <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+          <div className="mb-8 text-center">
+              <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
+                Featured Properties
+              </h2>
+              <p className="mt-3 text-base text-gray-600 sm:text-lg">
+                Handpicked accommodations for exceptional stays
+              </p>
+            </div>
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
+              <div className="lg:col-span-8">
+                <HotelCard hotel={featuredHotels[0]} />
+              </div>
+              <div className="grid gap-6 sm:grid-cols-2 lg:col-span-4 lg:grid-cols-1">
+                {featuredHotels[1] && <HotelCard hotel={featuredHotels[1]} />}
+                {featuredHotels[2] && <HotelCard hotel={featuredHotels[2]} />}
+              </div>
+            </div>
+        </section>
+      )}
+
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4">
+        <div className="h-px bg-gray-200" />
       </div>
-    </div>
-  </div>
-</div>
-       </div>
-      
-      
 
-       
-
-        <section className="mt-10 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+          <div className="mb-8 text-center">
+            <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
+              {searchQuery ? `Properties (${filteredHotels.length})` : 'All Properties'}
+            </h2>
+            <p className="mx-auto mt-3 max-w-2xl text-base text-gray-600 sm:text-lg">
+              {searchQuery
+                ? `Found ${filteredHotels.length} properties for "${searchQuery}"`
+                : 'Browse our complete collection of premium accommodations'
+              }
+            </p>
+          </div>
+          
           {loading ? (
-            <Loading message="Loading hotels..." />
+            <div className="flex justify-center py-20">
+              <Loading message="Loading properties..." />
+            </div>
           ) : filteredHotels.length > 0 ? (
-            filteredHotels.map((hotel) => <HotelCard key={hotel._id} hotel={hotel} />)
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {(searchQuery ? filteredHotels : remainingHotels).map((hotel) => (
+                <div key={hotel._id} className="h-full">
+                  <HotelCard hotel={hotel} />
+                </div>
+              ))}
+            </div>
           ) : (
-            <div className="col-span-full rounded-[2rem] border border-white/10 bg-slate-950/70 p-10 text-center text-slate-300">
-              <p className="text-lg font-medium text-slate-100">No hotels found</p>
-              <p className="mt-2 text-sm text-slate-400">Try a different search phrase.</p>
+            <div className="rounded-3xl border border-gray-200 bg-white py-16 text-center">
+              <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100">
+                <Search className="h-8 w-8 text-gray-400" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                {searchQuery ? 'No properties found' : 'No properties available'}
+              </h3>
+              <p className="mx-auto mb-8 max-w-md text-base text-gray-600">
+                {searchQuery
+                  ? 'Try exploring different cities or browse all available properties.'
+                  : 'Check back soon for new properties.'
+                }
+              </p>
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="rounded-full bg-indigo-600 px-8 py-3 text-sm font-bold text-white transition hover:bg-indigo-700"
+                >
+                  Explore All Properties
+                </button>
+              )}
             </div>
           )}
-        </section>
+      </section>
 
-        <ErrorAlert message={error} onClose={() => setError('')} />
-      </div>
+      {!searchQuery && hotels.length > 0 && (
+        <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-16 pt-8">
+          <div className="rounded-3xl bg-indigo-600 px-6 py-16 text-center text-white sm:px-10">
+            <h2 className="text-4xl font-bold mb-4">
+              Start Your Journey
+            </h2>
+            <p className="mx-auto mb-8 max-w-2xl text-base text-indigo-100 sm:text-lg">
+              Join travelers who already found reliable stays with Prime Booking.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-6 justify-center">
+              <Link
+                to="/my-bookings"
+                className="rounded-full bg-white px-8 py-3 text-sm font-bold text-indigo-600 transition hover:bg-gray-100"
+              >
+                My Bookings
+              </Link>
+              <button
+                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                className="rounded-full border border-indigo-400 bg-indigo-700 px-8 py-3 text-sm font-bold text-white transition hover:bg-indigo-800"
+              >
+                Discover More
+              </button>
+            </div>
+          </div>
+        </section>
+      )}
+    </div>
   );
 };
 

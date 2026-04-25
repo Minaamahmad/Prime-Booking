@@ -184,20 +184,20 @@ const HotelManagement = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-6 py-8">
 
         {/* Header */}
-        <div className="flex items-center justify-between mb-12 pb-6 border-b border-gray-100">
+        <div className="flex items-center justify-between mb-12 pb-6 border-b border-gray-200">
           <div>
             <button
               onClick={() => navigate('/owner-dashboard')}
-              className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 mb-3 transition-colors"
+              className="inline-flex items-center gap-2 text-sm font-bold text-gray-600 hover:text-indigo-600 mb-3 transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
               Back to Dashboard
             </button>
-            <h1 className="text-3xl font-semibold text-gray-900">Hotel Management</h1>
+            <h1 className="text-3xl font-bold text-gray-900">Hotel Management</h1>
           </div>
 
           <button
@@ -205,10 +205,10 @@ const HotelManagement = () => {
               if (showForm) handleCancel();
               setShowForm(!showForm);
             }}
-            className={`inline-flex items-center gap-2 px-6 py-2.5 rounded-lg font-medium transition-all ${
+            className={`inline-flex items-center gap-2 px-6 py-2.5 rounded-lg font-bold transition-all ${
               showForm
                 ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                : 'bg-gray-900 text-white hover:bg-gray-800'
+                : 'bg-indigo-600 text-white hover:bg-indigo-700'
             }`}
           >
             {showForm ? (
@@ -230,15 +230,15 @@ const HotelManagement = () => {
 
         {/* Form */}
         {showForm && (
-          <div className="bg-gray-50 rounded-2xl p-8 mb-12 border border-gray-100">
-            <h2 className="text-xl font-semibold text-gray-900 mb-6">
+          <div className="bg-white rounded-xl p-8 mb-12 border border-gray-200 shadow-md">
+            <h2 className="text-xl font-bold text-gray-900 mb-6">
               {editingHotel ? 'Edit Hotel' : 'New Hotel'}
             </h2>
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-bold text-gray-700 mb-2">
                     Hotel Name
                   </label>
                   <input
@@ -248,12 +248,12 @@ const HotelManagement = () => {
                     onChange={handleInputChange}
                     placeholder="Enter hotel name"
                     required
-                    className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                    className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-bold text-gray-700 mb-2">
                     Location
                   </label>
                   <input
@@ -263,20 +263,20 @@ const HotelManagement = () => {
                     onChange={handleInputChange}
                     placeholder="Enter location"
                     required
-                    className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                    className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-bold text-gray-700 mb-2">
                   Description
                 </label>
                 <div className="flex flex-wrap items-center gap-2 mb-3">
                   <button
                     type="button"
                     onClick={() => applyToSelection({ prefix: "**", suffix: "**" })}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 text-xs"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 text-xs font-semibold"
                   >
                     <Bold className="w-3.5 h-3.5" />
                   </button>
@@ -331,12 +331,12 @@ const HotelManagement = () => {
                   placeholder="Describe your hotel..."
                   rows="4"
                   ref={descriptionRef}
-                  className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent resize-none"
+                  className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-bold text-gray-700 mb-2">
                   Images
                 </label>
                 <input
@@ -347,7 +347,7 @@ const HotelManagement = () => {
                   className="w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border file:border-gray-200 file:text-sm file:bg-white file:text-gray-700 hover:file:bg-gray-50"
                 />
                 {selectedImages.length > 0 && (
-                  <p className="mt-2 text-xs text-gray-500">{selectedImages.length} file(s) selected</p>
+                  <p className="mt-2 text-xs text-gray-500 font-semibold">{selectedImages.length} file(s) selected</p>
                 )}
               </div>
 
@@ -355,13 +355,13 @@ const HotelManagement = () => {
                 <button
                   type="button"
                   onClick={handleCancel}
-                  className="px-5 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50"
+                  className="px-5 py-2.5 text-sm font-bold text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2.5 text-sm font-medium text-white bg-gray-900 rounded-lg hover:bg-gray-800"
+                  className="px-5 py-2.5 text-sm font-bold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700"
                 >
                   {editingHotel ? 'Update Hotel' : 'Create Hotel'}
                 </button>
@@ -398,7 +398,7 @@ const HotelManagement = () => {
                 {/* Content */}
                 <div className="p-5">
                   <div className="mb-3">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                    <h3 className="text-lg font-bold text-gray-900 mb-1">
                       {hotel.name}
                     </h3>
                     <p className="text-sm text-gray-500">
@@ -415,14 +415,14 @@ const HotelManagement = () => {
                     <div className="flex items-center gap-3">
                       <button
                         onClick={() => handleEdit(hotel)}
-                        className="text-sm text-gray-500 hover:text-gray-900 transition-colors inline-flex items-center gap-1.5"
+                        className="text-sm text-gray-500 hover:text-indigo-600 transition-colors inline-flex items-center gap-1.5 font-semibold"
                       >
                         <Edit2 className="w-3.5 h-3.5" />
                         Edit
                       </button>
                       <button
                         onClick={() => handleDelete(hotel._id)}
-                        className="text-sm text-gray-500 hover:text-red-600 transition-colors inline-flex items-center gap-1.5"
+                        className="text-sm text-gray-500 hover:text-red-600 transition-colors inline-flex items-center gap-1.5 font-semibold"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                         Delete
@@ -430,7 +430,7 @@ const HotelManagement = () => {
                     </div>
                     <button
                       onClick={() => navigate(`/rooms/${hotel._id}`)}
-                      className="inline-flex items-center gap-1.5 px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors"
+                      className="inline-flex items-center gap-1.5 px-4 py-2 bg-indigo-600 text-white text-sm font-bold rounded-lg hover:bg-indigo-700 transition-colors"
                     >
                       <Settings className="w-3.5 h-3.5" />
                       Manage
@@ -443,11 +443,11 @@ const HotelManagement = () => {
         ) : (
           <div className="text-center py-20">
             <div className="text-6xl text-gray-200 mb-4">🏨</div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">No hotels yet</h3>
+            <h3 className="text-xl font-bold text-gray-900 mb-2">No hotels yet</h3>
             <p className="text-gray-500 mb-6">Get started by adding your first hotel</p>
             <button
               onClick={() => setShowForm(true)}
-              className="inline-flex items-center gap-2 px-6 py-2.5 bg-gray-900 text-white font-medium rounded-lg hover:bg-gray-800"
+              className="inline-flex items-center gap-2 px-6 py-2.5 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700"
             >
               <Plus className="w-4 h-4" />
               Add Hotel

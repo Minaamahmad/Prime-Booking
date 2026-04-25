@@ -1,5 +1,92 @@
-@import "tailwindcss";
 
-body {
-  font-family: 'Poppins', sans-serif;
-}
+  @import "tailwindcss";
+
+  :root {
+    --pb-bg: #ede7df;
+    --pb-surface: #faf8f5;
+    --pb-surface-soft: #f3eee8;
+    --pb-border: #ddd2c6;
+    --pb-text: #2a241f;
+    --pb-text-muted: #6b5d4f;
+    --pb-primary: #6f4b33;
+    --pb-primary-soft: #8a6245;
+    --pb-accent: #b78356;
+    --pb-danger: #dc2626;
+    --pb-success: #16a34a;
+  }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(180deg, #f6f1eb 0%, #efe7dc 45%, #e7dccf 100%);
+    color: var(--pb-text);
+  }
+
+  #root {
+    min-height: 100vh;
+  }
+
+  .pb-page {
+    min-height: 100vh;
+    color: var(--pb-text);
+    background: linear-gradient(180deg, rgba(248, 244, 238, 0.9) 0%, rgba(239, 231, 221, 0.88) 100%);
+  }
+
+  .pb-container {
+    width: min(1200px, calc(100% - 2rem));
+    margin-inline: auto;
+  }
+
+  .pb-card {
+    background: var(--pb-surface);
+    border: 1px solid var(--pb-border);
+    border-radius: 1.25rem;
+    box-shadow: 0 12px 40px -32px rgba(15, 23, 42, 0.5);
+  }
+
+  .pb-input {
+    width: 100%;
+    border: 1px solid var(--pb-border);
+    background: var(--pb-surface-soft);
+    border-radius: 0.75rem;
+    padding: 0.7rem 0.95rem;
+    color: var(--pb-text);
+    outline: none;
+    transition: border-color .2s ease, box-shadow .2s ease;
+  }
+
+  .pb-input:focus {
+    border-color: var(--pb-primary-soft);
+  box-shadow: 0 0 0 3px rgba(138, 98, 69, 0.16);
+  }
+
+  .pb-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    font-weight: 600;
+    transition: all .2s ease;
+  }
+
+  .pb-btn-primary {
+    background: var(--pb-primary);
+    color: #ffffff;
+  }
+
+  .pb-btn-primary:hover {
+  background: var(--pb-primary-soft);
+  }
+
+  .pb-btn-ghost {
+  background: var(--pb-surface);
+    border: 1px solid var(--pb-border);
+    color: var(--pb-text);
+  }
+
+  .pb-btn-ghost:hover {
+    background: var(--pb-surface-soft);
+  }
+
+  .pb-muted {
+    color: var(--pb-text-muted);
+  }

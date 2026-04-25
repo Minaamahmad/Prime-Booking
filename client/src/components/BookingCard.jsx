@@ -29,56 +29,56 @@ const BookingCard = ({ booking, onApprove, onCancel, onChat, isOwner = false }) 
       : '—';
 
   const statusColor = {
-    pending: 'bg-slate-800 text-slate-300',
-    confirmed: 'bg-primary-teal text-slate-950',
-    cancelled: 'bg-primary-coral text-slate-950',
+    pending: 'bg-amber-100 text-amber-700',
+    confirmed: 'bg-emerald-100 text-emerald-700',
+    cancelled: 'bg-rose-100 text-rose-700',
   };
 
   return (
-    <div className="rounded-[2rem] border border-white/10 bg-slate-950/75 p-4 text-sm text-slate-100 shadow-[0_10px_40px_-30px_rgba(15,23,42,0.8)] transition hover:border-primary-teal/30">
-      <div className="flex flex-col gap-3">
+    <div className="rounded-2xl border border-gray-200 bg-white p-5 text-sm text-gray-700 shadow-lg transition hover:border-indigo-300">
+      <div className="flex flex-col gap-4">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h4 className="font-semibold text-white">{hotelName}</h4>
-            <p className="text-xs text-slate-400">
+            <h4 className="font-bold text-gray-900">{hotelName}</h4>
+            <p className="text-xs text-gray-500">
               {roomName} Room
-              {hotelLocation ? <span className="text-slate-500"> • {hotelLocation}</span> : null}
+              {hotelLocation ? <span className="text-gray-400"> • {hotelLocation}</span> : null}
             </p>
           </div>
-          <span className={`rounded-full px-3 py-1 text-[11px] uppercase tracking-[0.25em] ${statusColor[booking.status?.toLowerCase()] || 'bg-slate-800 text-slate-300'}`}>
+          <span className={`rounded-full px-3 py-1 text-[11px] uppercase tracking-wider font-bold ${statusColor[booking.status?.toLowerCase()] || 'bg-gray-100 text-gray-600'}`}>
             {booking.status}
           </span>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 text-slate-400 text-xs">
+        <div className="grid grid-cols-2 gap-4 text-xs text-gray-500">
           <div>
             <p>Check-in</p>
-            <p className="text-slate-100">{checkIn}</p>
+            <p className="text-gray-900 font-semibold">{checkIn}</p>
           </div>
           <div>
             <p>Check-out</p>
-            <p className="text-slate-100">{checkOut}</p>
+            <p className="text-gray-900 font-semibold">{checkOut}</p>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
-          <div className="rounded-3xl border border-white/10 bg-slate-900/80 p-3 text-slate-300">
-            <p className="text-[11px] uppercase tracking-[0.2em] text-slate-500">Per night</p>
-            <p className="mt-1 text-lg font-semibold text-white">{money(pricePerNight)}</p>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="rounded-xl border border-gray-200 bg-gray-50 p-4 text-gray-700">
+            <p className="text-[11px] uppercase tracking-wider text-gray-500 font-semibold">Per night</p>
+            <p className="mt-1 text-lg font-bold text-gray-900">{money(pricePerNight)}</p>
           </div>
-          <div className="rounded-3xl border border-white/10 bg-slate-900/80 p-3 text-slate-300">
-            <p className="text-[11px] uppercase tracking-[0.2em] text-slate-500">
+          <div className="rounded-xl border border-gray-200 bg-gray-50 p-4 text-gray-700">
+            <p className="text-[11px] uppercase tracking-wider text-gray-500 font-semibold">
               Total{typeof nights === 'number' ? ` • ${nights} night${nights === 1 ? '' : 's'}` : ''}
             </p>
-            <p className="mt-1 text-lg font-semibold text-white">{money(totalPrice)}</p>
+            <p className="mt-1 text-lg font-bold text-gray-900">{money(totalPrice)}</p>
           </div>
         </div>
 
         {isOwner && booking.user_id && (
-          <div className="rounded-3xl border border-white/10 bg-slate-900/80 p-3 text-slate-300">
-            <p className="text-[11px] uppercase tracking-[0.2em] text-slate-500">Guest</p>
-            <p className="mt-1 text-slate-100">{booking.user_id?.name}</p>
-            <p className="text-slate-400 text-xs">{booking.user_id?.email}</p>
+          <div className="rounded-xl border border-gray-200 bg-gray-50 p-4 text-gray-600">
+            <p className="text-[11px] uppercase tracking-wider text-gray-500 font-semibold">Guest</p>
+            <p className="mt-1 text-gray-900 font-semibold">{booking.user_id?.name}</p>
+            <p className="text-xs text-gray-500">{booking.user_id?.email}</p>
           </div>
         )}
 
@@ -86,7 +86,7 @@ const BookingCard = ({ booking, onApprove, onCancel, onChat, isOwner = false }) 
           {onChat && (
             <button
               onClick={() => onChat(booking._id)}
-              className="rounded-full bg-primary-teal px-3 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-950 transition hover:brightness-110"
+              className="rounded-full border border-gray-200 bg-white px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-gray-900 transition hover:bg-gray-100"
             >
               Chat
             </button>
@@ -94,7 +94,7 @@ const BookingCard = ({ booking, onApprove, onCancel, onChat, isOwner = false }) 
           {onApprove && booking.status === 'Pending' && (
             <button
               onClick={() => onApprove(booking._id)}
-              className="rounded-full bg-white/10 px-3 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-white transition hover:bg-white/20"
+              className="rounded-full bg-indigo-600 px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-white transition hover:bg-indigo-700"
             >
               Approve
             </button>
@@ -102,7 +102,7 @@ const BookingCard = ({ booking, onApprove, onCancel, onChat, isOwner = false }) 
           {onCancel && (
             <button
               onClick={() => onCancel(booking._id)}
-              className="rounded-full bg-primary-coral px-3 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-950 transition hover:brightness-110"
+              className="rounded-full bg-red-600 px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-white transition hover:bg-red-700"
             >
               Cancel
             </button>

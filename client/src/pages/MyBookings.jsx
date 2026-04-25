@@ -77,7 +77,7 @@ const MyBookings = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F4F7FE] text-gray-800 p-4 md:p-8 font-sans">
+    <div className="pb-page p-4 font-sans text-gray-800 md:p-8">
       <div className="mx-auto w-full max-w-7xl">
         
         {/* Header Section matching Owner Dashboard */}
@@ -111,11 +111,11 @@ const MyBookings = () => {
 
         {/* Filters Section */}
         <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div className="inline-flex flex-wrap items-center gap-2 p-1.5 rounded-[1.25rem] bg-white border border-gray-100 shadow-sm">
+          <div className="inline-flex flex-wrap items-center gap-2 p-1.5 rounded-xl bg-white border border-gray-200 shadow-md">
             <button
               type="button"
-              className={`rounded-xl px-5 py-2 text-sm font-semibold transition-all flex items-center gap-2 ${
-                filter === 'all' ? 'bg-[#0B0F19] text-white shadow-sm' : 'bg-transparent text-gray-500 hover:bg-gray-50'
+              className={`rounded-lg px-5 py-2.5 text-sm font-bold transition-all flex items-center gap-2 ${
+                filter === 'all' ? 'bg-indigo-600 text-white shadow-sm' : 'bg-transparent text-gray-600 hover:bg-gray-100'
               }`}
               onClick={() => setFilter('all')}
             >
@@ -126,8 +126,8 @@ const MyBookings = () => {
             </button>
             <button
               type="button"
-              className={`rounded-xl px-5 py-2 text-sm font-semibold transition-all flex items-center gap-2 ${
-                filter === 'pending' ? 'bg-[#0B0F19] text-white shadow-sm' : 'bg-transparent text-gray-500 hover:bg-gray-50'
+              className={`rounded-lg px-5 py-2.5 text-sm font-bold transition-all flex items-center gap-2 ${
+                filter === 'pending' ? 'bg-indigo-600 text-white shadow-sm' : 'bg-transparent text-gray-600 hover:bg-gray-100'
               }`}
               onClick={() => setFilter('pending')}
             >
@@ -138,8 +138,8 @@ const MyBookings = () => {
             </button>
             <button
               type="button"
-              className={`rounded-xl px-5 py-2 text-sm font-semibold transition-all flex items-center gap-2 ${
-                filter === 'confirmed' ? 'bg-[#0B0F19] text-white shadow-sm' : 'bg-transparent text-gray-500 hover:bg-gray-50'
+              className={`rounded-lg px-5 py-2.5 text-sm font-bold transition-all flex items-center gap-2 ${
+                filter === 'confirmed' ? 'bg-indigo-600 text-white shadow-sm' : 'bg-transparent text-gray-600 hover:bg-gray-100'
               }`}
               onClick={() => setFilter('confirmed')}
             >
@@ -291,7 +291,7 @@ const MyBookings = () => {
                         {booking.status?.toLowerCase() !== 'cancelled' && (
                           <button
                             onClick={() => handleCancelBooking(booking._id)}
-                            className="flex-1 rounded-xl bg-[#0B0F19] py-2.5 text-[13px] font-bold text-white shadow-sm transition-colors hover:bg-black"
+                            className="flex-1 rounded-xl bg-red-600 py-2.5 text-[13px] font-bold text-white shadow-sm transition-colors hover:bg-red-700"
                           >
                             Cancel Stay
                           </button>
@@ -320,7 +320,7 @@ const MyBookings = () => {
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <button
                 onClick={() => navigate('/')}
-                className="rounded-xl bg-[#0B0F19] px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-black"
+                className="rounded-xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-indigo-700"
               >
                 Explore hotels
               </button>

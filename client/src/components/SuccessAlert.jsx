@@ -2,14 +2,14 @@ const SuccessAlert = ({ message, onClose }) => {
   if (!message) return null;
 
   return (
-    <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
+    <div className="relative mb-4 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-emerald-700 shadow-md">
       <div className="flex items-center">
-        <span className="text-xl mr-2">✓</span>
-        <p className="flex-1">{message}</p>
+        <span className="mr-2 text-xl font-bold">✓</span>
+        <p className="flex-1 font-semibold">{message}</p>
         {onClose && (
           <button
             onClick={onClose}
-            className="absolute top-0 right-0 mt-2 mr-2 text-green-700 hover:text-green-900 text-lg font-bold"
+            className="absolute top-0 right-0 mr-2 mt-2 text-lg font-bold text-emerald-700 hover:text-emerald-900"
           >
             ✕
           </button>

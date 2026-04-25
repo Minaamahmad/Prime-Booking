@@ -32,24 +32,18 @@ const RoleSelection = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-4xl">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary-teal/10 rounded-full blur-3xl"></div>
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-primary-amber/10 rounded-full blur-3xl"></div>
-        </div>
-
         <div className="relative">
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-primary-teal to-primary-amber rounded-2xl mb-4">
+            <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-600">
               <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
               </svg>
             </div>
-            <h1 className="text-3xl font-bold text-white mb-2">Prime Booking</h1>
-            <h2 className="text-xl font-semibold text-slate-300 mb-4">Choose Your Role</h2>
-            <p className="text-slate-400 text-sm leading-relaxed max-w-md mx-auto">
+            <h1 className="mb-2 text-3xl font-bold text-gray-900">Prime Booking</h1>
+            <h2 className="mb-4 text-xl font-semibold text-gray-700">Choose Your Role</h2>
+            <p className="mx-auto max-w-md text-base leading-relaxed text-gray-600">
               Select how you'd like to use our platform and start your journey
             </p>
           </div>
@@ -58,34 +52,34 @@ const RoleSelection = () => {
 
           <div className="grid md:grid-cols-2 gap-6">
             <div
-              className={`group relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 cursor-pointer transition-all duration-300 hover:bg-white/10 hover:border-primary-teal/50 hover:shadow-xl hover:shadow-primary-teal/10 ${
+              className={`group relative cursor-pointer rounded-2xl border border-gray-200 bg-white p-8 transition-all duration-300 hover:-translate-y-1 hover:border-indigo-300 hover:shadow-xl ${
                 loading ? 'opacity-50 cursor-not-allowed' : ''
               }`}
               onClick={() => handleRoleSelection('Guest')}
             >
               <div className="text-center">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-teal/20 rounded-2xl mb-6 group-hover:bg-primary-teal/30 transition-colors">
+                <div className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-100 transition-colors group-hover:bg-indigo-200">
                   <span className="text-3xl">🏠</span>
                 </div>
-                <h3 className="text-xl font-semibold text-white mb-3">I'm a Guest</h3>
-                <p className="text-slate-400 mb-6 leading-relaxed">
+                <h3 className="mb-3 text-xl font-bold text-gray-900">I'm a Guest</h3>
+                <p className="mb-6 leading-relaxed text-gray-600">
                   Book amazing hotels, manage your reservations, and enjoy seamless stays with real-time communication
                 </p>
-                <ul className="text-left space-y-2 text-sm text-slate-500">
+                <ul className="space-y-2 text-left text-sm text-gray-600">
                   <li className="flex items-center gap-2">
-                    <svg className="w-4 h-4 text-primary-teal" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="h-4 w-4 text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
                     Browse and book hotels
                   </li>
                   <li className="flex items-center gap-2">
-                    <svg className="w-4 h-4 text-primary-teal" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="h-4 w-4 text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
                     Manage reservations
                   </li>
                   <li className="flex items-center gap-2">
-                    <svg className="w-4 h-4 text-primary-teal" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="h-4 w-4 text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
                     Chat with hotel owners
@@ -95,40 +89,40 @@ const RoleSelection = () => {
             </div>
 
             <div
-              className={`group relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 cursor-pointer transition-all duration-300 hover:bg-white/10 hover:border-primary-amber/50 hover:shadow-xl hover:shadow-primary-amber/10 ${
+              className={`group relative cursor-pointer rounded-2xl border border-gray-200 bg-white p-8 transition-all duration-300 hover:-translate-y-1 hover:border-indigo-300 hover:shadow-xl ${
                 loading ? 'opacity-50 cursor-not-allowed' : ''
               }`}
               onClick={() => handleRoleSelection('Owner')}
             >
               <div className="text-center">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-amber/20 rounded-2xl mb-6 group-hover:bg-primary-amber/30 transition-colors">
+                <div className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-100 transition-colors group-hover:bg-indigo-200">
                   <span className="text-3xl">🏨</span>
                 </div>
-                <h3 className="text-xl font-semibold text-white mb-3">I'm a Hotel Owner</h3>
-                <p className="text-slate-400 mb-6 leading-relaxed">
+                <h3 className="mb-3 text-xl font-bold text-gray-900">I'm a Hotel Owner</h3>
+                <p className="mb-6 leading-relaxed text-gray-600">
                   Manage your properties, connect with guests, and grow your business with our platform
                 </p>
-                <ul className="text-left space-y-2 text-sm text-slate-500">
+                <ul className="space-y-2 text-left text-sm text-gray-600">
                   <li className="flex items-center gap-2">
-                    <svg className="w-4 h-4 text-primary-amber" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="h-4 w-4 text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
                     Manage hotels & rooms
                   </li>
                   <li className="flex items-center gap-2">
-                    <svg className="w-4 h-4 text-primary-amber" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="h-4 w-4 text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
                     Handle bookings
                   </li>
                   <li className="flex items-center gap-2">
-                    <svg className="w-4 h-4 text-primary-amber" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="h-4 w-4 text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
                     Communicate with guests
                   </li>
                   <li className="flex items-center gap-2">
-                    <svg className="w-4 h-4 text-primary-amber" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="h-4 w-4 text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
                     View booking analytics

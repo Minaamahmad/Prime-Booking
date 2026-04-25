@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { hotelService, bookingService } from '../services/api';
 import ErrorAlert from '../components/ErrorAlert';
 import Loading from '../components/Loading';
+import { Building2, Calendar, Users, CheckCircle, MessageCircle, RefreshCw, Edit, Sparkles } from 'lucide-react';
 
 const OwnerDashboard = () => {
   const navigate = useNavigate();
@@ -102,50 +103,54 @@ const OwnerDashboard = () => {
     navigate(`/chat/${bookingId}`);
   };
 
-  // Helper to generate dynamic status pill colors based on the reference image
+  // Helper to generate status colors
   const getStatusColor = (status) => {
     switch (status?.toLowerCase()) {
-      case 'confirmed': return 'text-emerald-500 bg-emerald-50';
+      case 'confirmed': return 'bg-green-100 text-green-800 border-green-200';
       case 'checkedin': 
-      case 'checked in': return 'text-yellow-600 bg-yellow-50';
+      case 'checked in': return 'bg-blue-100 text-blue-800 border-blue-200';
       case 'checkedout':
-      case 'checked out': return 'text-blue-500 bg-blue-50';
-      case 'cancelled': return 'text-pink-500 bg-pink-50';
+      case 'checked out': return 'bg-gray-100 text-gray-800 border-gray-200';
+      case 'cancelled': return 'bg-red-100 text-red-800 border-red-200';
       case 'pending':
-      case 'new': return 'text-purple-500 bg-purple-50';
-      default: return 'text-gray-500 bg-gray-50';
+      case 'new': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      default: return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#F4F7FE] text-gray-800 p-4 md:p-8 font-sans">
-      
-      {/* Header & Global Actions */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-        <div>
-          <button 
-            onClick={() => navigate('/')} 
-            className="text-sm text-gray-500 hover:text-gray-900 mb-2 flex items-center gap-2 transition-colors font-medium"
-          >
-            ← Back to Home
-          </button>
-          <h1 className="text-3xl font-bold text-gray-900">Owner Dashboard</h1>
-        </div>
-        
-        <div className="flex flex-wrap gap-3">
-          <button
-            className="px-5 py-2.5 bg-white border border-gray-200 text-gray-700 font-medium rounded-xl shadow-sm hover:bg-gray-50 transition-all flex items-center gap-2"
-            onClick={() => fetchDashboardData()}
-          >
-            🔄 Refresh Data
-          </button>
-          <button
-            className="px-5 py-2.5 bg-[#0B0F19] text-white font-medium rounded-xl shadow-sm hover:bg-black transition-all flex items-center gap-2"
-            onClick={() => navigate('/hotels')}
-          >
-            📝 Manage Hotels
-          </button>
-        </div>
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bg-white border-b border-gray-200 px-4 py-6 sm:px-6 lg:px-8">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 max-w-7xl mx-auto">
+            <div>
+              <button 
+                onClick={() => navigate('/owner-dashboard')}
+                className="text-gray-600 hover:text-gray-900 transition-colors mb-2 flex items-center gap-2"
+              >
+                ← Back to Dashboard
+              </button>
+              <h1 className="text-3xl font-bold text-gray-900">Owner Dashboard</h1>
+              <p className="text-gray-600 mt-1">Manage your properties and bookings</p>
+            </div>
+            
+            <div className="flex flex-wrap gap-3">
+              <button
+                onClick={() => fetchDashboardData()}
+                className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+              >
+                <RefreshCw className="w-4 h-4" />
+                Refresh Data
+              </button>
+              <button
+                onClick={() => navigate('/hotels')}
+                className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+              >
+                <Edit className="w-4 h-4" />
+                Manage Properties
+              </button>
+            </div>
+          </div>
       </div>
 
       <ErrorAlert message={error} onClose={() => setError('')} />
@@ -156,169 +161,183 @@ const OwnerDashboard = () => {
         </div>
       ) : (
         <div className="flex flex-col gap-8">
-          
-          {/* Dashboard Stats Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            
-            {/* Stat Card: Total Hotels */}
-            <div className="bg-white rounded-3xl p-6 shadow-sm flex flex-col justify-between border border-transparent hover:border-gray-200 transition-all">
-              <div>
-                <h3 className="text-sm font-semibold text-gray-500">Total Hotels</h3>
-                <div className="mt-3">
-                  <span className="text-4xl font-bold text-gray-900">{stats.totalHotels}</span>
+          {/* Stats Grid */}
+          <div className="px-4 sm:px-6 lg:px-8 py-8">
+            <div className="max-w-7xl mx-auto">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                {/* Stat Card: Total Properties */}
+                <div className="bg-white border border-gray-200 rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center">
+                      <Building2 className="w-6 h-6 text-indigo-600" />
+                    </div>
+                    <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Properties</span>
+                  </div>
+                  <div className="mt-3">
+                    <span className="text-4xl font-bold text-gray-900">{stats.totalHotels}</span>
+                  </div>
+                  <button 
+                    onClick={() => navigate('/hotels')} 
+                    className="mt-4 text-sm font-semibold text-indigo-600 hover:text-indigo-700 flex items-center gap-1"
+                  >
+                    Manage Properties <span>→</span>
+                  </button>
                 </div>
-              </div>
-              <button 
-                onClick={() => navigate('/hotels')} 
-                className="mt-6 text-left text-sm font-semibold text-[#00E08F] hover:text-[#00c981] transition-colors flex items-center gap-1"
-              >
-                Manage Hotels <span>→</span>
-              </button>
-            </div>
 
-            {/* Stat Card: Total Bookings */}
-            <div className="bg-white rounded-3xl p-6 shadow-sm flex flex-col justify-between border border-transparent hover:border-gray-200 transition-all">
-              <div>
-                <h3 className="text-sm font-semibold text-gray-500">Total Bookings</h3>
-                <div className="mt-3">
-                  <span className="text-4xl font-bold text-gray-900">{stats.totalBookings}</span>
+                {/* Stat Card: Total Bookings */}
+                <div className="bg-white border border-gray-200 rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center">
+                      <Calendar className="w-6 h-6 text-emerald-600" />
+                    </div>
+                    <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Total Bookings</span>
+                  </div>
+                  <div className="mt-3">
+                    <span className="text-4xl font-bold text-gray-900">{stats.totalBookings}</span>
+                  </div>
+                  <div className="mt-2">
+                    <span className="text-sm text-gray-600">All time bookings</span>
+                  </div>
                 </div>
-              </div>
-              <div className="mt-6">
-                <span className="inline-block px-3 py-1 bg-gray-100 text-gray-600 text-xs font-semibold rounded-full">
-                  All time
-                </span>
-              </div>
-            </div>
 
-            {/* Stat Card: Pending Bookings */}
-            <div className="bg-white rounded-3xl p-6 shadow-sm flex flex-col justify-between border border-transparent hover:border-gray-200 transition-all">
-              <div>
-                <h3 className="text-sm font-semibold text-gray-500">Pending Bookings</h3>
-                <div className="mt-3">
-                  <span className="text-4xl font-bold text-gray-900">{stats.pendingBookings}</span>
+                {/* Stat Card: Pending Bookings */}
+                <div className="bg-white border border-gray-200 rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center">
+                      <Users className="w-6 h-6 text-amber-600" />
+                    </div>
+                    <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Pending</span>
+                  </div>
+                  <div className="mt-3">
+                    <span className="text-4xl font-bold text-gray-900">{stats.pendingBookings}</span>
+                  </div>
+                  <div className="mt-2">
+                    <span className="text-sm text-gray-600">Awaiting approval</span>
+                  </div>
                 </div>
-              </div>
-              <div className="mt-6">
-                <span className="inline-block px-3 py-1 bg-purple-50 text-purple-600 text-xs font-semibold rounded-full">
-                  Action required
-                </span>
-              </div>
-            </div>
 
-            {/* Stat Card: Confirmed Bookings */}
-            <div className="bg-white rounded-3xl p-6 shadow-sm flex flex-col justify-between border border-transparent hover:border-gray-200 transition-all">
-              <div>
-                <h3 className="text-sm font-semibold text-gray-500">Confirmed Bookings</h3>
-                <div className="mt-3">
-                  <span className="text-4xl font-bold text-gray-900">{stats.confirmedBookings}</span>
+                {/* Stat Card: Confirmed Bookings */}
+                <div className="bg-white border border-gray-200 rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center">
+                      <CheckCircle className="w-6 h-6 text-emerald-600" />
+                    </div>
+                    <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Confirmed</span>
+                  </div>
+                  <div className="mt-3">
+                    <span className="text-4xl font-bold text-gray-900">{stats.confirmedBookings}</span>
+                  </div>
+                  <div className="mt-2">
+                    <span className="text-sm text-gray-600">Approved bookings</span>
+                  </div>
                 </div>
-              </div>
-              <div className="mt-6">
-                <span className="inline-block px-3 py-1 bg-green-50 text-[#00E08F] text-xs font-semibold rounded-full">
-                  Active
-                </span>
+
               </div>
             </div>
+          </div>
 
+          {/* Divider */}
+          <div className="max-w-7xl mx-auto px-8 py-8">
+            <div className="h-px bg-gray-200"></div>
           </div>
 
           {/* Guest Bookings Table */}
-          <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-              <div>
-                <h2 className="text-xl font-bold text-gray-900">Guest Bookings</h2>
-                <p className="text-sm text-gray-400 mt-1">Manage all bookings across your hotels</p>
-              </div>
-              
-            </div>
-            
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="text-xs text-gray-400 border-b border-gray-100">
-                    <th className="pb-4 px-2 font-medium">Booking ID</th>
-                    <th className="pb-4 px-2 font-medium">Guest Name</th>
-                    <th className="pb-4 px-2 font-medium">Email</th>
-                    <th className="pb-4 px-2 font-medium">Room Type</th>
-                    <th className="pb-4 px-2 font-medium">Check In</th>
-                    <th className="pb-4 px-2 font-medium">Check Out</th>
-                    <th className="pb-4 px-2 font-medium">Status</th>
-                    <th className="pb-4 px-2 font-medium text-center">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {bookings.length > 0 ? (
-                    bookings.map((booking) => (
-                      <tr key={booking._id} className="text-sm border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
-                        <td className="py-4 px-2 font-medium text-gray-500">
-                          #{booking._id.slice(-6).toUpperCase()}
-                        </td>
-                        <td className="py-4 px-2 flex items-center gap-3">
-                          <img 
-                            src={`https://ui-avatars.com/api/?name=${booking.user_id?.name || 'Guest'}&background=random&color=fff`} 
-                            alt="avatar" 
-                            className="w-8 h-8 rounded-full shadow-sm" 
-                          />
-                          <span className="font-semibold text-gray-900">{booking.user_id?.name || 'N/A'}</span>
-                        </td>
-                        <td className="py-4 px-2 text-gray-500">
-                          {booking.user_id?.email || 'N/A'}
-                        </td>
-                        <td className="py-4 px-2 text-gray-600 font-medium">
-                          {booking.room_id?.type || 'N/A'}
-                        </td>
-                        <td className="py-4 px-2 text-gray-600">
-                          {new Date(booking.check_in).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                        </td>
-                        <td className="py-4 px-2 text-gray-600">
-                          {new Date(booking.check_out).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                        </td>
-                        <td className="py-4 px-2">
-                          <span className={`px-3 py-1.5 rounded-full text-[11px] uppercase tracking-wider font-bold ${getStatusColor(booking.status)}`}>
-                            {booking.status || 'Unknown'}
-                          </span>
-                        </td>
-                        <td className="py-4 px-2 text-center">
-                          <div className="flex items-center justify-center gap-2">
-                            <button
-                              type="button"
-                              onClick={() => handleChat(booking._id)}
-                              className="w-9 h-9 flex items-center justify-center rounded-xl border border-gray-200 text-gray-500 hover:bg-[#0B0F19] hover:text-white transition-all shadow-sm"
-                              title="Open chat"
-                            >
-                              💬
-                            </button>
-                            {booking.status === 'Pending' ? (
-                              <button
-                                type="button"
-                                onClick={() => handleApprove(booking._id)}
-                                disabled={actionLoadingId === booking._id}
-                                className="px-3 py-2 rounded-xl bg-[#00E08F] text-[#0B0F19] font-semibold text-xs shadow-sm hover:brightness-95 transition disabled:opacity-60 disabled:cursor-not-allowed"
-                                title="Approve booking"
-                              >
-                                {actionLoadingId === booking._id ? 'Approving…' : 'Approve'}
-                              </button>
-                            ) : null}
-                          </div>
-                        </td>
+          <div className="px-4 sm:px-6 lg:px-8 pb-8">
+            <div className="max-w-7xl mx-auto">
+              <div className="bg-white border border-gray-200 rounded-xl shadow-md p-6 md:p-8">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+                  <div>
+                    <h2 className="text-2xl font-bold text-gray-900">Guest Bookings</h2>
+                    <p className="text-gray-600 mt-1">Manage and approve guest bookings</p>
+                  </div>
+                </div>
+                
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="text-xs text-gray-500 border-b border-gray-200">
+                        <th className="pb-4 px-2 font-bold text-left">Booking ID</th>
+                        <th className="pb-4 px-2 font-bold text-left">Guest Name</th>
+                        <th className="pb-4 px-2 font-bold text-left">Email</th>
+                        <th className="pb-4 px-2 font-bold text-left">Room Type</th>
+                        <th className="pb-4 px-2 font-bold text-left">Check In</th>
+                        <th className="pb-4 px-2 font-bold text-left">Check Out</th>
+                        <th className="pb-4 px-2 font-bold text-center">Status</th>
+                        <th className="pb-4 px-2 font-bold text-center">Actions</th>
                       </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan="8" className="py-12 text-center text-gray-400">
-                        No bookings found.
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
+                    </thead>
+                    <tbody>
+                      {bookings.length > 0 ? (
+                        bookings.map((booking) => (
+                          <tr key={booking._id} className="text-sm border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                            <td className="py-4 px-2 font-bold text-gray-600">
+                              #{booking._id.slice(-6).toUpperCase()}
+                            </td>
+                            <td className="py-4 px-2 flex items-center gap-3">
+                              <img 
+                                src={`https://ui-avatars.com/api/?name=${booking.user_id?.name || 'Guest'}&background=6366F1&color=fff`} 
+                                alt="avatar" 
+                                className="w-8 h-8 rounded-full border border-gray-200" 
+                              />
+                              <span className="font-semibold text-gray-900">{booking.user_id?.name || 'N/A'}</span>
+                            </td>
+                            <td className="py-4 px-2 text-gray-600">
+                              {booking.user_id?.email || 'N/A'}
+                            </td>
+                            <td className="py-4 px-2 text-gray-700 font-semibold">
+                              {booking.room_id?.type || 'N/A'}
+                            </td>
+                            <td className="py-4 px-2 text-gray-600">
+                              {new Date(booking.check_in).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                            </td>
+                            <td className="py-4 px-2 text-gray-600">
+                              {new Date(booking.check_out).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                            </td>
+                            <td className="py-4 px-2">
+                              <span className={`px-3 py-1.5 rounded-full text-[11px] uppercase tracking-wider font-bold border ${getStatusColor(booking.status)}`}>
+                                {booking.status || 'Unknown'}
+                              </span>
+                            </td>
+                            <td className="py-4 px-2 text-center">
+                              <div className="flex items-center justify-center gap-2">
+                                <button
+                                  type="button"
+                                  onClick={() => handleChat(booking._id)}
+                                  className="w-10 h-10 flex items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-indigo-600 hover:text-white transition-colors"
+                                  title="Open chat"
+                                >
+                                  <MessageCircle className="w-5 h-5" />
+                                </button>
+                                {booking.status === 'Pending' ? (
+                                  <button
+                                    onClick={() => handleApprove(booking._id)}
+                                    disabled={actionLoadingId === booking._id}
+                                    className="px-3 py-2 text-xs bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50"
+                                  >
+                                    {actionLoadingId === booking._id ? 'Approving…' : 'Approve'}
+                                  </button>
+                                ) : null}
+                              </div>
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan="8" className="py-12 text-center text-gray-400">
+                            <div className="flex flex-col items-center">
+                              <Sparkles className="w-12 h-12 text-gray-300 mb-3" />
+                              <span>No bookings found.</span>
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
-
-          
-          
-          
         </div>
       )}
     </div>
