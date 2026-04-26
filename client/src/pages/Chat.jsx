@@ -160,7 +160,7 @@ const Chat = () => {
               ) : (
                 <div className="space-y-4">
                   {uniqueMessages.map((message) => {
-                    const isMe = message.sender === user?._id;
+                    const isMe = String(message.sender_id?._id) === String(user?._id);
                     const messageId = normalizeMessageId(message);
                     if (!messageId) return null;
 
