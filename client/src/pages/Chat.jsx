@@ -170,7 +170,7 @@ const Chat = () => {
                         className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}
                       >
                         <div className={`max-w-xs sm:max-w-md lg:max-w-lg ${isMe ? 'order-2' : 'order-1'}`}>
-                          <div className={`px-4 py-2 rounded-2xl ${isMe ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-900'}`}>
+                          <div className={`px-4 py-2.5 rounded-xl ${isMe ? 'bg-indigo-600 text-white' : 'bg-white border border-gray-200 text-gray-900 shadow-sm'}`}>
                             <p className="text-sm">{message.content}</p>
                           </div>
                           <div className={`text-xs text-gray-500 mt-1 ${isMe ? 'text-right' : 'text-left'}`}>

@@ -50,30 +50,29 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
-        <div className="rounded-3xl border border-gray-200 bg-white p-6 shadow-md sm:p-10">
+      <section className="  min-h-[500px] mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 bg-[url('https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?q=80&w=1470&auto=format&fit=crop')] bg-cover bg-center bg-no-repeat  overflow-hidden shadow-2xl  -mt-20">
+      
+        <div className="rounded-3xl   p-6 ">
           <div className="mx-auto max-w-3xl text-center">
-            <h1 className="mt-6 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">Find your perfect stay</h1>
-            <p className="mt-4 text-base leading-relaxed text-gray-600 sm:text-lg">
-              Discover clean, comfortable hotels with modern amenities and reliable service.
-            </p>
+            <h1 className="mt-6 text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">Find your perfect stay</h1>
+           
           </div>
 
-          <div className="mx-auto mt-8 max-w-3xl">
-            <div className="flex w-full items-center gap-3 rounded-xl border border-gray-300 bg-gray-50 px-4 py-3">
+          <div className="mx-auto mt-8 max-w-3xl ">
+            <div className="flex w-full items-center gap-3 rounded-xl   border-2 border-gray-300  bg-gray-50 px-4 py-3">
               <MapPin className="h-5 w-5 shrink-0 text-indigo-500" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search by hotel name or city (e.g., Islamabad)"
-                className="w-full border-0 bg-transparent px-1 py-2 text-base text-gray-900 outline-none placeholder:text-gray-400"
-              />
+                className="w-full border-0 bg-transparent   px-1 py-2 text-base text-gray-900 outline-none placeholder:text-gray-400"
+                />
               {searchQuery ? (
                 <button
-                  type="button"
-                  onClick={() => setSearchQuery('')}
-                  className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-600 transition hover:bg-gray-100"
+                type="button"
+                onClick={() => setSearchQuery('')}
+                className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-600 transition hover:bg-gray-100"
                 >
                   Clear
                 </button>
@@ -81,6 +80,7 @@ const Home = () => {
             </div>
           </div>
         </div>
+   
       </section>
 
       {/* Error Alert */}
@@ -90,46 +90,28 @@ const Home = () => {
         </div>
       )}
 
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-2 gap-4 rounded-3xl border border-gray-200 bg-white p-6 sm:grid-cols-4 sm:p-8">
-          {[
-            { icon: Star, title: 'Premium Quality', desc: 'Verified properties' },
-            { icon: Wifi, title: 'Modern Amenities', desc: 'Comfort-first stays' },
-            { icon: Coffee, title: 'Great Service', desc: 'Friendly support' },
-            { icon: Car, title: 'Easy Access', desc: 'Convenient locations' },
-          ].map((item) => (
-            <div key={item.title} className="text-center">
-              <div className="mx-auto mb-3 inline-flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100">
-                <item.icon className="h-6 w-6 text-indigo-600" />
-              </div>
-              <h3 className="text-sm font-bold text-gray-900">{item.title}</h3>
-              <p className="text-xs text-gray-500">{item.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+      
 
       {/* Featured Properties */}
       {!searchQuery && featuredHotels.length > 0 && (
         <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
-          <div className="mb-8 text-center">
-              <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
-                Featured Properties
-              </h2>
-              <p className="mt-3 text-base text-gray-600 sm:text-lg">
-                Handpicked accommodations for exceptional stays
-              </p>
-            </div>
-            <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-              <div className="lg:col-span-8">
-                <HotelCard hotel={featuredHotels[0]} />
-              </div>
-              <div className="grid gap-6 sm:grid-cols-2 lg:col-span-4 lg:grid-cols-1">
-                {featuredHotels[1] && <HotelCard hotel={featuredHotels[1]} />}
-                {featuredHotels[2] && <HotelCard hotel={featuredHotels[2]} />}
-              </div>
-            </div>
-        </section>
+  <div className="mb-8 text-center">
+    <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
+      Featured Properties
+    </h2>
+    <p className="mt-3 text-base text-gray-600 sm:text-lg">
+      Handpicked accommodations for exceptional stays
+    </p>
+  </div>
+
+  <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+    {featuredHotels.map((hotel, index) => (
+      <div key={index} className="flex h-full">
+        <HotelCard hotel={hotel} className="w-full" />
+      </div>
+    ))}
+  </div>
+</section>
       )}
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4">

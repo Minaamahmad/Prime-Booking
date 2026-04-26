@@ -4,7 +4,7 @@ import Hotels from "../Models/Hotels.js";
 // Create a new hotel
 export const createHotel = async (req, res) => {
   try {
-    const { name, description, location } = req.body;
+    const { name, description, location, amenities } = req.body;
     const owner_id = req.user._id;
 
     // Validation
@@ -18,6 +18,7 @@ export const createHotel = async (req, res) => {
       description,
       location,
       images: [],
+      amenities: amenities || [],
     });
 
     await newHotel.save();
@@ -77,7 +78,7 @@ export const getHotelById = async (req, res) => {
 // Update a hotel by ID
 export const updateHotel = async (req, res) => {
   try {
-    const { name, description, location } = req.body;
+    const { name, description, location, amenities } = req.body;
     const hotel = await Hotels.findById(req.params.id);
     if (!hotel) {
       return res.status(404).json({ message: "Hotel not found" });
@@ -88,6 +89,9 @@ export const updateHotel = async (req, res) => {
     hotel.name = name || hotel.name;
     hotel.description = description || hotel.description;
     hotel.location = location || hotel.location;
+    if (amenities !== undefined) {
+      hotel.amenities = amenities;
+    }
     await hotel.save();
     res.status(200).json(hotel);
   } catch (error) {

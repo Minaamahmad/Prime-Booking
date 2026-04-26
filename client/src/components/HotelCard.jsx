@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, MapPin } from 'lucide-react';
+import { MapPin, ArrowRight, Heart, Wifi, Waves, Coffee, Car, Dumbbell, Utensils, Snowflake, Tv, Shield } from 'lucide-react';
 
 const HotelCard = ({ hotel }) => {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
@@ -7,51 +7,88 @@ const HotelCard = ({ hotel }) => {
     ? hotel.images[0].startsWith('http')
       ? hotel.images[0]
       : `${API_BASE_URL}${hotel.images[0]}`
-    : 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop';
+    : 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800';
 
-  const hasPrice = typeof hotel?.price_per_night === 'number';
   const detailUrl = `/hotel/${hotel._id}`;
 
+  const amenityIcons = {
+    wifi: Wifi,
+    pool: Waves,
+    breakfast: Coffee,
+    parking: Car,
+    gym: Dumbbell,
+    restaurant: Utensils,
+    ac: Snowflake,
+    tv: Tv,
+    security: Shield,
+  };
+
+  const displayAmenities = hotel.amenities?.slice(0, 4) || [];
+
   return (
-    <article className="group flex h-full w-full max-w-sm flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:border-indigo-300 hover:shadow-xl">
-      <Link to={detailUrl} className="block">
-        <div className="relative h-48 overflow-hidden">
+    <article className="group flex h-[380px] w-full max-w-md flex-col border border-gray-200 overflow-hidden p-2 rounded-2xl bg-white shadow-lg transition-all duration-300  hover:border-indigo-300 hover:shadow-xl">
+      {/* Image Section */}
+      <Link to={detailUrl} className="block relative">
+        <div className="relative h-40 overflow-hidden rounded-xl">
           <img
             src={firstImage}
             alt={hotel.name}
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-            onError={(e) => {
-              e.currentTarget.src = 'https://via.placeholder.com/640x480?text=Hotel';
-            }}
+            className="h-full w-full object-cover transition-transform duration-500 "
           />
-          {hasPrice ? (
-            <div className="absolute left-4 top-4 rounded-full bg-white/95 px-4 py-2 text-sm font-bold text-gray-900 shadow-md backdrop-blur-sm">
-              PKR {hotel.price_per_night.toLocaleString()} / night
-            </div>
-          ) : null}
+          
         </div>
       </Link>
 
-      <div className="flex flex-1 flex-col p-5">
+      {/* Content Section */}
+      <div className="flex flex-1 flex-col p-4">
+        
+        
         <Link to={detailUrl}>
-          <h3 className="line-clamp-1 text-xl font-bold text-gray-900 group-hover:text-indigo-600 transition-colors">{hotel.name}</h3>
+          <h3 className="line-clamp-1 text-lg font-bold text-gray-900 group-hover:text-indigo-600 transition-colors">
+            {hotel.name}
+          </h3>
         </Link>
-        <p className="mt-3 flex items-center gap-2 text-sm text-gray-600">
-          <MapPin className="h-4 w-4 shrink-0 text-indigo-500" />
+        
+        <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-gray-500">
+          {hotel.description || 'Enjoy a clean, modern stay experience with premium amenities and easy access to the city.'}
+        </p>
+
+        {/* Amenities */}
+        {displayAmenities.length > 0 && (
+          <div className="mt-3 flex flex-wrap gap-2">
+            {displayAmenities.map((amenity) => {
+              const Icon = amenityIcons[amenity];
+              return Icon ? (
+                <div
+                  key={amenity}
+                  className="inline-flex items-center gap-1 px-2 py-1 bg-gray-100 rounded-md text-xs text-gray-600"
+                  title={amenity}
+                >
+                  <Icon className="w-3 h-3" />
+                </div>
+              ) : null;
+            })}
+            {hotel.amenities?.length > 4 && (
+              <span className="text-xs text-gray-400">+{hotel.amenities.length - 4}</span>
+            )}
+          </div>
+        )}
+
+        {/* Location Row */}
+        <div className="mt-auto flex items-center gap-1.5 text-xs text-gray-600 pt-3">
+          <MapPin className="h-3.5 w-3.5 shrink-0 text-gray-400" />
           <span className="line-clamp-1">{hotel.location || 'Location not specified'}</span>
-        </p>
-        <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-gray-500">
-          {hotel.description || 'Comfortable rooms and a clean, modern stay experience.'}
-        </p>
+        </div>
       </div>
 
-      <div className="flex items-center gap-2 px-5 pb-5">
+      {/* Button Section (Bottom) */}
+      <div className="px-4 pb-4">
         <Link
           to={detailUrl}
-          className="inline-flex items-center gap-2 rounded-lg border-2 border-indigo-600 px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-indigo-600 transition-all hover:bg-indigo-600 hover:text-white"
+          className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-xs font-bold text-white transition-all hover:bg-indigo-700 shadow-md active:scale-95"
         >
-          Rooms
-          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+          View Details
+          <ArrowRight className="h-3.5 w-3.5" />
         </Link>
       </div>
     </article>

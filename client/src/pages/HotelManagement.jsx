@@ -4,7 +4,7 @@ import { hotelService } from '../services/api';
 import ErrorAlert from '../components/ErrorAlert';
 import SuccessAlert from '../components/SuccessAlert';
 import Loading from '../components/Loading';
-import { Bold, Italic, List, ListOrdered, Wifi, Coffee, Waves, ArrowLeft, Plus, X, Edit2, Trash2, Settings } from "lucide-react";
+import { Bold, Italic, List, ListOrdered, Wifi, Coffee, Waves, ArrowLeft, Plus, X, Edit2, Trash2, Settings, Car, Dumbbell, Utensils, Snowflake, Tv, Shield } from "lucide-react";
 
 const HotelManagement = () => {
   const navigate = useNavigate();
@@ -18,6 +18,7 @@ const HotelManagement = () => {
     name: '',
     location: '',
     description: '',
+    amenities: [],
   });
   const descriptionRef = useRef(null);
   const [selectedImages, setSelectedImages] = useState([]);
@@ -42,6 +43,15 @@ const HotelManagement = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleAmenityToggle = (amenity) => {
+    setFormData((prev) => ({
+      ...prev,
+      amenities: prev.amenities.includes(amenity)
+        ? prev.amenities.filter((a) => a !== amenity)
+        : [...prev.amenities, amenity],
+    }));
   };
 
   const applyToSelection = ({ prefix = "", suffix = "" }) => {
@@ -143,7 +153,7 @@ const HotelManagement = () => {
         await hotelService.uploadHotelImages(hotelId, selectedImages);
       }
 
-      setFormData({ name: '', location: '', description: '' });
+      setFormData({ name: '', location: '', description: '', amenities: [] });
       setSelectedImages([]);
       setEditingHotel(null);
       setShowForm(false);
@@ -159,6 +169,7 @@ const HotelManagement = () => {
       name: hotel.name,
       location: hotel.location,
       description: hotel.description || '',
+      amenities: hotel.amenities || [],
     });
     setShowForm(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -178,7 +189,7 @@ const HotelManagement = () => {
 
   const handleCancel = () => {
     setEditingHotel(null);
-    setFormData({ name: '', location: '', description: '' });
+    setFormData({ name: '', location: '', description: '', amenities: [] });
     setSelectedImages([]);
     setShowForm(false);
   };
@@ -349,6 +360,52 @@ const HotelManagement = () => {
                 {selectedImages.length > 0 && (
                   <p className="mt-2 text-xs text-gray-500 font-semibold">{selectedImages.length} file(s) selected</p>
                 )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-3">
+                  Amenities
+                </label>
+                <div className="grid grid-cols-2 gap-3">
+                  {[
+                    { id: 'wifi', label: 'WiFi', icon: Wifi },
+                    { id: 'pool', label: 'Pool', icon: Waves },
+                    { id: 'breakfast', label: 'Breakfast', icon: Coffee },
+                    { id: 'parking', label: 'Parking', icon: Car },
+                    { id: 'gym', label: 'Gym', icon: Dumbbell },
+                    { id: 'restaurant', label: 'Restaurant', icon: Utensils },
+                    { id: 'ac', label: 'Air Conditioning', icon: Snowflake },
+                    { id: 'tv', label: 'TV', icon: Tv },
+                    { id: 'security', label: '24/7 Security', icon: Shield },
+                  ].map((amenity) => {
+                    const Icon = amenity.icon;
+                    return (
+                      <label
+                        key={amenity.id}
+                        className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all ${
+                          formData.amenities.includes(amenity.id)
+                            ? 'border-indigo-500 bg-indigo-50'
+                            : 'border-gray-200 bg-white hover:border-gray-300'
+                        }`}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={formData.amenities.includes(amenity.id)}
+                          onChange={() => handleAmenityToggle(amenity.id)}
+                          className="sr-only"
+                        />
+                        <Icon className={`w-4 h-4 ${
+                          formData.amenities.includes(amenity.id) ? 'text-indigo-600' : 'text-gray-400'
+                        }`} />
+                        <span className={`text-sm font-medium ${
+                          formData.amenities.includes(amenity.id) ? 'text-indigo-900' : 'text-gray-700'
+                        }`}>
+                          {amenity.label}
+                        </span>
+                      </label>
+                    );
+                  })}
+                </div>
               </div>
 
               <div className="flex justify-end gap-3 pt-4">

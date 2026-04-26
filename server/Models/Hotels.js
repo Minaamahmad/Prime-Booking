@@ -28,6 +28,11 @@ const hotelSchema = new mongoose.Schema(
       default: [],
     },
 
+    amenities: {
+      type: [String],
+      default: [],
+    },
+
     popularity: {
       type: Number,
       default: 0,
