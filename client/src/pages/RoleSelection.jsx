@@ -52,9 +52,8 @@ const RoleSelection = () => {
 
           <div className="grid md:grid-cols-2 gap-6">
             <div
-              className={`group relative cursor-pointer rounded-2xl border border-gray-200 bg-white p-8 transition-all duration-300 hover:-translate-y-1 hover:border-indigo-300 hover:shadow-xl ${
-                loading ? 'opacity-50 cursor-not-allowed' : ''
-              }`}
+              className={`group relative cursor-pointer rounded-2xl border border-gray-200 bg-white p-8 transition-all duration-300 hover:-translate-y-1 hover:border-indigo-300 hover:shadow-xl ${loading ? 'opacity-50 cursor-not-allowed' : ''
+                }`}
               onClick={() => handleRoleSelection('Guest')}
             >
               <div className="text-center">
@@ -89,9 +88,8 @@ const RoleSelection = () => {
             </div>
 
             <div
-              className={`group relative cursor-pointer rounded-2xl border border-gray-200 bg-white p-8 transition-all duration-300 hover:-translate-y-1 hover:border-indigo-300 hover:shadow-xl ${
-                loading ? 'opacity-50 cursor-not-allowed' : ''
-              }`}
+              className={`group relative cursor-pointer rounded-2xl border border-gray-200 bg-white p-8 transition-all duration-300 hover:-translate-y-1 hover:border-indigo-300 hover:shadow-xl ${loading ? 'opacity-50 cursor-not-allowed' : ''
+                }`}
               onClick={() => handleRoleSelection('Owner')}
             >
               <div className="text-center">

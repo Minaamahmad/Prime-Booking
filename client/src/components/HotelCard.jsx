@@ -35,20 +35,20 @@ const HotelCard = ({ hotel }) => {
             alt={hotel.name}
             className="h-full w-full object-cover transition-transform duration-500 "
           />
-          
+
         </div>
       </Link>
 
       {/* Content Section */}
       <div className="flex flex-1 flex-col p-4">
-        
-        
+
+
         <Link to={detailUrl}>
           <h3 className="line-clamp-1 text-lg font-bold text-gray-900 group-hover:text-indigo-600 transition-colors">
             {hotel.name}
           </h3>
         </Link>
-        
+
         <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-gray-500">
           {hotel.description || 'Enjoy a clean, modern stay experience with premium amenities and easy access to the city.'}
         </p>

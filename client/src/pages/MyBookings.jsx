@@ -10,16 +10,16 @@ const MyBookings = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [bookings, setBookings] = useState([]);
-  const[loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const[success, setSuccess] = useState(location.state?.success || '');
+  const [success, setSuccess] = useState(location.state?.success || '');
   const [toast, setToast] = useState({ message: '', type: '' });
   const [filter, setFilter] = useState('all'); // all, pending, confirmed
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
 
   useEffect(() => {
     fetchBookings();
-  },[]);
+  }, []);
 
   const fetchBookings = async () => {
     try {
@@ -65,7 +65,7 @@ const MyBookings = () => {
   const getStatusColor = (status) => {
     switch (status?.toLowerCase()) {
       case 'confirmed': return 'text-emerald-600 bg-emerald-50';
-      case 'checkedin': 
+      case 'checkedin':
       case 'checked in': return 'text-yellow-600 bg-yellow-50';
       case 'checkedout':
       case 'checked out': return 'text-blue-600 bg-blue-50';
@@ -79,12 +79,12 @@ const MyBookings = () => {
   return (
     <div className="pb-page p-4 font-sans text-gray-800 md:p-8">
       <div className="mx-auto w-full max-w-7xl">
-        
+
         {/* Header Section matching Owner Dashboard */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
           <div>
-            <button 
-              onClick={() => navigate('/')} 
+            <button
+              onClick={() => navigate('/')}
               className="text-sm text-gray-500 hover:text-gray-900 mb-2 flex items-center gap-2 transition-colors font-medium"
             >
               ← Back to Home
@@ -114,21 +114,19 @@ const MyBookings = () => {
           <div className="inline-flex flex-wrap items-center gap-2 p-1.5 rounded-xl bg-white border border-gray-200 shadow-md">
             <button
               type="button"
-              className={`rounded-lg px-5 py-2.5 text-sm font-bold transition-all flex items-center gap-2 ${
-                filter === 'all' ? 'bg-indigo-600 text-white shadow-sm' : 'bg-transparent text-gray-600 hover:bg-gray-100'
-              }`}
+              className={`rounded-lg px-5 py-2.5 text-sm font-bold transition-all flex items-center gap-2 ${filter === 'all' ? 'bg-indigo-600 text-white shadow-sm' : 'bg-transparent text-gray-600 hover:bg-gray-100'
+                }`}
               onClick={() => setFilter('all')}
             >
-              All 
+              All
               <span className={`px-2 py-0.5 rounded-full text-[11px] ${filter === 'all' ? 'bg-white/20 text-white' : 'bg-gray-100 text-gray-600'}`}>
                 {bookings.length}
               </span>
             </button>
             <button
               type="button"
-              className={`rounded-lg px-5 py-2.5 text-sm font-bold transition-all flex items-center gap-2 ${
-                filter === 'pending' ? 'bg-indigo-600 text-white shadow-sm' : 'bg-transparent text-gray-600 hover:bg-gray-100'
-              }`}
+              className={`rounded-lg px-5 py-2.5 text-sm font-bold transition-all flex items-center gap-2 ${filter === 'pending' ? 'bg-indigo-600 text-white shadow-sm' : 'bg-transparent text-gray-600 hover:bg-gray-100'
+                }`}
               onClick={() => setFilter('pending')}
             >
               Pending
@@ -138,9 +136,8 @@ const MyBookings = () => {
             </button>
             <button
               type="button"
-              className={`rounded-lg px-5 py-2.5 text-sm font-bold transition-all flex items-center gap-2 ${
-                filter === 'confirmed' ? 'bg-indigo-600 text-white shadow-sm' : 'bg-transparent text-gray-600 hover:bg-gray-100'
-              }`}
+              className={`rounded-lg px-5 py-2.5 text-sm font-bold transition-all flex items-center gap-2 ${filter === 'confirmed' ? 'bg-indigo-600 text-white shadow-sm' : 'bg-transparent text-gray-600 hover:bg-gray-100'
+                }`}
               onClick={() => setFilter('confirmed')}
             >
               Confirmed
@@ -180,9 +177,9 @@ const MyBookings = () => {
               const checkOut = booking?.check_out ? new Date(booking.check_out) : null;
               const nights =
                 checkIn &&
-                checkOut &&
-                !Number.isNaN(checkIn.getTime()) &&
-                !Number.isNaN(checkOut.getTime())
+                  checkOut &&
+                  !Number.isNaN(checkIn.getTime()) &&
+                  !Number.isNaN(checkOut.getTime())
                   ? Math.max(1, Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24)))
                   : 1;
 
@@ -190,16 +187,16 @@ const MyBookings = () => {
               const totalPrice = typeof totalPriceRaw === 'number' ? totalPriceRaw : Number(totalPriceRaw) || 0;
               const pricePerNight = room?.price_per_night ?? totalPrice / nights;
               const pricePerNightNumber = typeof pricePerNight === 'number' ? pricePerNight : Number(pricePerNight) || 0;
-              
+
               return (
                 <div key={booking._id} className="flex flex-col overflow-hidden rounded-[24px] bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-gray-200 transition-all">
-                  
+
                   {/* Property Image */}
                   <div className="h-52 w-full bg-gray-100">
-                    <img 
-                      src={imageUrl || 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'} 
-                      alt="Property" 
-                      className="h-full w-full object-cover" 
+                    <img
+                      src={imageUrl || 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'}
+                      alt="Property"
+                      className="h-full w-full object-cover"
                       onError={(e) => {
                         e.currentTarget.src =
                           'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
@@ -225,7 +222,7 @@ const MyBookings = () => {
                           Room type: <span className="text-gray-900 font-bold">{room?.type || 'N/A'}</span>
                         </p>
                       </div>
-                      
+
                       {/* Status indicator applying OwnerDashboard colors */}
                       <div className={`rounded-full px-3 py-1.5 text-[11px] uppercase tracking-wider font-bold ${getStatusColor(booking.status)}`}>
                         {booking.status || 'Pending'}
@@ -279,7 +276,7 @@ const MyBookings = () => {
                       <p className="mb-5 text-[13px] text-gray-500 font-medium leading-relaxed">
                         Need help with this reservation? Reach out to the owner or cancel your stay.
                       </p>
-                      
+
                       <div className="flex gap-3">
                         <button
                           onClick={() => handleChat(booking._id)}
@@ -287,7 +284,7 @@ const MyBookings = () => {
                         >
                           Chat Owner
                         </button>
-                        
+
                         {booking.status?.toLowerCase() !== 'cancelled' && (
                           <button
                             onClick={() => handleCancelBooking(booking._id)}

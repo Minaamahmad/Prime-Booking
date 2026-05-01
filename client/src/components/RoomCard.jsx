@@ -13,7 +13,7 @@ const RoomCard = ({ room, onSelect }) => {
           alt={room.type}
           className="h-48 w-full rounded-xl object-cover"
         />
-        
+
         {/* Additional images indicator */}
         {room.images && room.images.length > 1 && (
           <div className="flex gap-2 mt-3">
@@ -33,7 +33,7 @@ const RoomCard = ({ room, onSelect }) => {
           </div>
         )}
       </div>
-      
+
       <div className="mt-2 flex flex-1 flex-col space-y-3">
         <div className="flex items-center justify-between gap-3">
           <h4 className="truncate font-bold text-gray-900">{room.type}</h4>
@@ -46,11 +46,10 @@ const RoomCard = ({ room, onSelect }) => {
           <button
             onClick={() => onSelect(room)}
             disabled={room.total_stock === 0}
-            className={`mt-auto w-full rounded-full px-5 py-3 text-sm font-bold uppercase tracking-wider transition ${
-              room.total_stock === 0
+            className={`mt-auto w-full rounded-full px-5 py-3 text-sm font-bold uppercase tracking-wider transition ${room.total_stock === 0
                 ? 'cursor-not-allowed bg-gray-100 text-gray-400'
                 : 'bg-indigo-600 text-white hover:bg-indigo-700'
-            }`}
+              }`}
           >
             Select room
           </button>

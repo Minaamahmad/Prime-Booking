@@ -51,11 +51,11 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <section className="  min-h-[500px] mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 bg-[url('https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?q=80&w=1470&auto=format&fit=crop')] bg-cover bg-center bg-no-repeat  overflow-hidden shadow-2xl  -mt-20">
-      
+
         <div className="rounded-3xl   p-6 ">
           <div className="mx-auto max-w-3xl text-center">
             <h1 className="mt-6 text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">Find your perfect stay</h1>
-           
+
           </div>
 
           <div className="mx-auto mt-8 max-w-3xl ">
@@ -67,12 +67,12 @@ const Home = () => {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search by hotel name or city (e.g., Islamabad)"
                 className="w-full border-0 bg-transparent   px-1 py-2 text-base text-gray-900 outline-none placeholder:text-gray-400"
-                />
+              />
               {searchQuery ? (
                 <button
-                type="button"
-                onClick={() => setSearchQuery('')}
-                className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-600 transition hover:bg-gray-100"
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-600 transition hover:bg-gray-100"
                 >
                   Clear
                 </button>
@@ -80,7 +80,7 @@ const Home = () => {
             </div>
           </div>
         </div>
-   
+
       </section>
 
       {/* Error Alert */}
@@ -90,28 +90,28 @@ const Home = () => {
         </div>
       )}
 
-      
+
 
       {/* Featured Properties */}
       {!searchQuery && featuredHotels.length > 0 && (
         <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
-  <div className="mb-8 text-center">
-    <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
-      Featured Properties
-    </h2>
-    <p className="mt-3 text-base text-gray-600 sm:text-lg">
-      Handpicked accommodations for exceptional stays
-    </p>
-  </div>
+          <div className="mb-8 text-center">
+            <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
+              Featured Properties
+            </h2>
+            <p className="mt-3 text-base text-gray-600 sm:text-lg">
+              Handpicked accommodations for exceptional stays
+            </p>
+          </div>
 
-  <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-    {featuredHotels.map((hotel, index) => (
-      <div key={index} className="flex h-full">
-        <HotelCard hotel={hotel} className="w-full" />
-      </div>
-    ))}
-  </div>
-</section>
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {featuredHotels.map((hotel, index) => (
+              <div key={index} className="flex h-full">
+                <HotelCard hotel={hotel} className="w-full" />
+              </div>
+            ))}
+          </div>
+        </section>
       )}
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4">
@@ -119,54 +119,54 @@ const Home = () => {
       </div>
 
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
-          <div className="mb-8 text-center">
-            <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
-              {searchQuery ? `Properties (${filteredHotels.length})` : 'All Properties'}
-            </h2>
-            <p className="mx-auto mt-3 max-w-2xl text-base text-gray-600 sm:text-lg">
+        <div className="mb-8 text-center">
+          <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
+            {searchQuery ? `Properties (${filteredHotels.length})` : 'All Properties'}
+          </h2>
+          <p className="mx-auto mt-3 max-w-2xl text-base text-gray-600 sm:text-lg">
+            {searchQuery
+              ? `Found ${filteredHotels.length} properties for "${searchQuery}"`
+              : 'Browse our complete collection of premium accommodations'
+            }
+          </p>
+        </div>
+
+        {loading ? (
+          <div className="flex justify-center py-20">
+            <Loading message="Loading properties..." />
+          </div>
+        ) : filteredHotels.length > 0 ? (
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {(searchQuery ? filteredHotels : remainingHotels).map((hotel) => (
+              <div key={hotel._id} className="h-full">
+                <HotelCard hotel={hotel} />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="rounded-3xl border border-gray-200 bg-white py-16 text-center">
+            <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100">
+              <Search className="h-8 w-8 text-gray-400" />
+            </div>
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">
+              {searchQuery ? 'No properties found' : 'No properties available'}
+            </h3>
+            <p className="mx-auto mb-8 max-w-md text-base text-gray-600">
               {searchQuery
-                ? `Found ${filteredHotels.length} properties for "${searchQuery}"`
-                : 'Browse our complete collection of premium accommodations'
+                ? 'Try exploring different cities or browse all available properties.'
+                : 'Check back soon for new properties.'
               }
             </p>
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
+                className="rounded-full bg-indigo-600 px-8 py-3 text-sm font-bold text-white transition hover:bg-indigo-700"
+              >
+                Explore All Properties
+              </button>
+            )}
           </div>
-          
-          {loading ? (
-            <div className="flex justify-center py-20">
-              <Loading message="Loading properties..." />
-            </div>
-          ) : filteredHotels.length > 0 ? (
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {(searchQuery ? filteredHotels : remainingHotels).map((hotel) => (
-                <div key={hotel._id} className="h-full">
-                  <HotelCard hotel={hotel} />
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="rounded-3xl border border-gray-200 bg-white py-16 text-center">
-              <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100">
-                <Search className="h-8 w-8 text-gray-400" />
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                {searchQuery ? 'No properties found' : 'No properties available'}
-              </h3>
-              <p className="mx-auto mb-8 max-w-md text-base text-gray-600">
-                {searchQuery
-                  ? 'Try exploring different cities or browse all available properties.'
-                  : 'Check back soon for new properties.'
-                }
-              </p>
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery('')}
-                  className="rounded-full bg-indigo-600 px-8 py-3 text-sm font-bold text-white transition hover:bg-indigo-700"
-                >
-                  Explore All Properties
-                </button>
-              )}
-            </div>
-          )}
+        )}
       </section>
 
       {!searchQuery && hotels.length > 0 && (

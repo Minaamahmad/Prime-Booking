@@ -143,6 +143,24 @@ const HotelDetails = () => {
               </p>
             </section>
 
+            {hotel.amenities && hotel.amenities.length > 0 && (
+              <section className="rounded-xl border border-gray-200 bg-white p-6 shadow-md">
+                <h2 className="text-xl font-bold text-gray-900">What this place offers</h2>
+                <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3">
+                  {hotel.amenities.map((amenity, idx) => (
+                    <div key={idx} className="flex items-center gap-3 text-sm font-medium text-gray-700">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-50">
+                        <svg className="h-4 w-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                      </div>
+                      {amenity}
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
             <section className="rounded-xl border border-gray-200 bg-white p-6 shadow-md">
               <div className="mb-4 flex items-center justify-between">
                 <h2 className="text-xl font-bold text-gray-900">Available rooms</h2>
@@ -166,9 +184,8 @@ const HotelDetails = () => {
                       type="button"
                       disabled={isUnavailable}
                       onClick={() => handleRoomSelect(room)}
-                      className={`flex w-full flex-col gap-4 rounded-xl border p-4 text-left transition sm:flex-row ${
-                        isSelected ? 'border-indigo-600 bg-indigo-50' : 'border-gray-200 bg-white hover:border-indigo-300'
-                      } ${isUnavailable ? 'cursor-not-allowed opacity-60' : ''}`}
+                      className={`flex w-full flex-col gap-4 rounded-xl border p-4 text-left transition sm:flex-row ${isSelected ? 'border-indigo-600 bg-indigo-50' : 'border-gray-200 bg-white hover:border-indigo-300'
+                        } ${isUnavailable ? 'cursor-not-allowed opacity-60' : ''}`}
                     >
                       <img src={firstImage} alt={room.type} className="h-28 w-full rounded-lg object-cover sm:w-36" />
                       <div className="flex-1">

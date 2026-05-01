@@ -10,7 +10,7 @@ const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const checkAuth = async () => {
-      // Check for temporary token (user needs role selection)
+      // Check for temporary token
       const tempToken = document.cookie.split(';').find(c => c.trim().startsWith('temp_token='))?.split('=')[1];
 
       if (tempToken) {

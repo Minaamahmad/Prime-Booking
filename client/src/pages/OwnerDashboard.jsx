@@ -22,7 +22,7 @@ const OwnerDashboard = () => {
 
   useEffect(() => {
     fetchDashboardData();
-  },[]);
+  }, []);
 
   const fetchDashboardData = async () => {
     try {
@@ -107,7 +107,7 @@ const OwnerDashboard = () => {
   const getStatusColor = (status) => {
     switch (status?.toLowerCase()) {
       case 'confirmed': return 'bg-green-100 text-green-800 border-green-200';
-      case 'checkedin': 
+      case 'checkedin':
       case 'checked in': return 'bg-blue-100 text-blue-800 border-blue-200';
       case 'checkedout':
       case 'checked out': return 'bg-gray-100 text-gray-800 border-gray-200';
@@ -123,34 +123,34 @@ const OwnerDashboard = () => {
       {/* Header */}
       <div className="bg-white border-b border-gray-200 px-4 py-6 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 max-w-7xl mx-auto">
-            <div>
-              <button 
-                onClick={() => navigate('/owner-dashboard')}
-                className="text-gray-600 hover:text-gray-900 transition-colors mb-2 flex items-center gap-2"
-              >
-                ← Back to Dashboard
-              </button>
-              <h1 className="text-3xl font-bold text-gray-900">Owner Dashboard</h1>
-              <p className="text-gray-600 mt-1">Manage your properties and bookings</p>
-            </div>
-            
-            <div className="flex flex-wrap gap-3">
-              <button
-                onClick={() => fetchDashboardData()}
-                className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
-              >
-                <RefreshCw className="w-4 h-4" />
-                Refresh Data
-              </button>
-              <button
-                onClick={() => navigate('/hotels')}
-                className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
-              >
-                <Edit className="w-4 h-4" />
-                Manage Properties
-              </button>
-            </div>
+          <div>
+            <button
+              onClick={() => navigate('/owner-dashboard')}
+              className="text-gray-600 hover:text-gray-900 transition-colors mb-2 flex items-center gap-2"
+            >
+              ← Back to Dashboard
+            </button>
+            <h1 className="text-3xl font-bold text-gray-900">Owner Dashboard</h1>
+            <p className="text-gray-600 mt-1">Manage your properties and bookings</p>
           </div>
+
+          <div className="flex flex-wrap gap-3">
+            <button
+              onClick={() => fetchDashboardData()}
+              className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+            >
+              <RefreshCw className="w-4 h-4" />
+              Refresh Data
+            </button>
+            <button
+              onClick={() => navigate('/hotels')}
+              className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+            >
+              <Edit className="w-4 h-4" />
+              Manage Properties
+            </button>
+          </div>
+        </div>
       </div>
 
       <ErrorAlert message={error} onClose={() => setError('')} />
@@ -165,7 +165,7 @@ const OwnerDashboard = () => {
           <div className="px-4 sm:px-6 lg:px-8 py-8">
             <div className="max-w-7xl mx-auto">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                
+
                 {/* Stat Card: Total Properties */}
                 <div className="bg-white border border-gray-200 rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow">
                   <div className="flex items-center justify-between mb-4">
@@ -177,8 +177,8 @@ const OwnerDashboard = () => {
                   <div className="mt-3">
                     <span className="text-4xl font-bold text-gray-900">{stats.totalHotels}</span>
                   </div>
-                  <button 
-                    onClick={() => navigate('/hotels')} 
+                  <button
+                    onClick={() => navigate('/hotels')}
                     className="mt-4 text-sm font-semibold text-indigo-600 hover:text-indigo-700 flex items-center gap-1"
                   >
                     Manage Properties <span>→</span>
@@ -252,7 +252,7 @@ const OwnerDashboard = () => {
                     <p className="text-gray-600 mt-1">Manage and approve guest bookings</p>
                   </div>
                 </div>
-                
+
                 <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead>
@@ -275,10 +275,10 @@ const OwnerDashboard = () => {
                               #{booking._id.slice(-6).toUpperCase()}
                             </td>
                             <td className="py-4 px-2 flex items-center gap-3">
-                              <img 
-                                src={`https://ui-avatars.com/api/?name=${booking.user_id?.name || 'Guest'}&background=6366F1&color=fff`} 
-                                alt="avatar" 
-                                className="w-8 h-8 rounded-full border border-gray-200" 
+                              <img
+                                src={`https://ui-avatars.com/api/?name=${booking.user_id?.name || 'Guest'}&background=6366F1&color=fff`}
+                                alt="avatar"
+                                className="w-8 h-8 rounded-full border border-gray-200"
                               />
                               <span className="font-semibold text-gray-900">{booking.user_id?.name || 'N/A'}</span>
                             </td>
