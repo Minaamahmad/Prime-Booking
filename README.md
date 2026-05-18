@@ -21,7 +21,9 @@
 
 ## 📸 Screenshots
 
-> Add screenshots here — frontend dashboard, owner panel, real-time chat, admin panel.  
+> Add screenshots here — frontend dashboard, owner panel, real-time chat, admin panel.
+> <img width="1263" height="900" alt="Capture 1" src="https://github.com/user-attachments/assets/015e5653-2ba0-47b4-a29a-ab3bb48bc253" />
+
 > Tip: Drag images directly into this file on GitHub to upload them.
 
 ---
