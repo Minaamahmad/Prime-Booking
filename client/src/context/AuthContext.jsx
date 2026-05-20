@@ -80,6 +80,10 @@ const AuthProvider = ({ children }) => {
     return user?.role === 'Guest';
   }, [user]);
 
+  const isAdmin = useCallback(() => {
+    return user?.role === 'Admin';
+  }, [user]);
+
   const isAuthenticated = useCallback(() => {
     return user !== null;
   }, [user]);
@@ -95,6 +99,7 @@ const AuthProvider = ({ children }) => {
         logout,
         isOwner,
         isGuest,
+        isAdmin,
         isAuthenticated,
       }}
     >

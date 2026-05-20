@@ -4,7 +4,7 @@ import { authService } from '../services/api';
 import { useLocation } from 'react-router-dom';
 
 const Navbar = () => {
-  const { logout, isAuthenticated, isOwner } = useAuth();
+  const { logout, isAuthenticated, isOwner, isAdmin } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const isLoginPage = location.pathname === '/login';
@@ -40,6 +40,12 @@ const Navbar = () => {
         </Link>
 
         <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-6">
+          {isAuthenticated() && isAdmin() && (
+            <Link to="/admin/users" className={linkClass}>
+              Admin Panel
+            </Link>
+          )}
+
           {isAuthenticated() && isOwner() && (
             <>
               <Link to="/owner-dashboard" className={linkClass}>
@@ -51,7 +57,7 @@ const Navbar = () => {
             </>
           )}
 
-          {isAuthenticated() && !isOwner() && (
+          {isAuthenticated() && !isOwner() && !isAdmin() && (
             <Link to="/my-bookings" className={linkClass}>
               My Bookings
             </Link>

@@ -91,4 +91,11 @@ export const bookingService = {
   cancelBooking: (id) => api.delete(`/v1/bookings/${id}`),
 };
 
+// Admin Services
+export const adminService = {
+  getAllUsers: () => api.get('/v1/admin/users'),
+  banUser: (userId) => api.put(`/v1/admin/users/${userId}/ban`),
+  unbanUser: (userId) => api.put(`/v1/admin/users/${userId}/unban`),
+};
+
 export default api;

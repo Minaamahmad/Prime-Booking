@@ -12,6 +12,7 @@ import OwnerDashboard from './pages/OwnerDashboard';
 import OwnerChats from './pages/OwnerChats';
 import Chat from './pages/Chat';
 import RoleSelection from './pages/RoleSelection';
+import AdminUsers from './pages/AdminUsers';
 
 const AppContent = () => {
   const location = useLocation();
@@ -63,6 +64,15 @@ const AppContent = () => {
             element={
               <ProtectedRoute requiredRole="Owner">
                 <OwnerChats />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/admin/users"
+            element={
+              <ProtectedRoute requiredRole="Admin">
+                <AdminUsers />
               </ProtectedRoute>
             }
           />

@@ -13,6 +13,7 @@ import hotelrouter from "./routes/HotelsRoute.js";
 import roomrouter from "./routes/RoomsRoute.js";
 import bookingrouter from "./routes/BookingRoute.js";
 import messagesrouter from "./routes/MessagesRoute.js";
+import adminrouter from "./routes/AdminRoute.js";
 import "./config/passport.js";
 import cookieParser from "cookie-parser";
 import googlAuthrouter from "./Controllers/googleauth.js";
@@ -120,6 +121,7 @@ app.use("/v1/hotels", hotelrouter);
 app.use("/v1/rooms", roomrouter);
 app.use("/v1/bookings", bookingrouter);
 app.use("/v1/messages", messagesrouter);
+app.use("/v1/admin", adminrouter);
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {

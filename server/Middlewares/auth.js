@@ -1,9 +1,10 @@
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import User from "../Models/Users.js";
 
 dotenv.config();
 
-const protect = (req, res, next) => {
+const protect = async (req, res, next) => {
   const token =
     req.cookies?.token ||
     req.headers?.authorization?.split(' ')[1] ||
@@ -15,10 +16,17 @@ const protect = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = {
-      _id: decoded.id || decoded._id,
-      role: decoded.role,
-    };
+
+    const user = await User.findById(decoded.id || decoded._id);
+    if (!user) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    if (user.banned) {
+      return res.status(403).json({ message: 'User is banned' });
+    }
+
+    req.user = user;
     next();
   } catch (err) {
     return res.status(401).json({ message: 'Invalid token' });

@@ -18,17 +18,22 @@ if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
       async (req, accessToken, refreshToken, profile, done) => {
         try {
           let user = await User.findOne({ provider_id: profile.id });
+          const email = profile.emails[0].value.toLowerCase();
+          const adminEmails = (process.env.ADMIN_EMAILS || '').split(',').map(e => e.trim().toLowerCase()).filter(Boolean);
+          const isAdminEmail = adminEmails.includes(email);
 
           if (!user) {
-            // Create user without role - will be set during role selection
             user = await User.create({
               name: profile.displayName,
-              email: profile.emails[0].value,
-              role: null, // No role initially
+              email,
+              role: isAdminEmail ? 'Admin' : null,
               provider: "google",
               provider_id: profile.id,
               avatar: profile.photos[0].value,
             });
+          } else if (isAdminEmail && user.role !== 'Admin') {
+            user.role = 'Admin';
+            await user.save();
           }
 
           return done(null, user);
