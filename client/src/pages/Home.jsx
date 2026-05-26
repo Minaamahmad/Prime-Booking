@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { hotelService } from '../services/api';
 import HotelCard from '../components/HotelCard';
-import Loading from '../components/Loading';
 import ErrorAlert from '../components/ErrorAlert';
+import { HotelCardSkeleton } from '../components/Skeletons';
 import { Search, MapPin, Wifi, Car, Coffee, Star } from 'lucide-react';
 
 const Home = () => {
@@ -132,8 +132,8 @@ const Home = () => {
         </div>
 
         {loading ? (
-          <div className="flex justify-center py-20">
-            <Loading message="Loading properties..." />
+          <div className="py-10">
+            <HotelCardSkeleton count={8} />
           </div>
         ) : filteredHotels.length > 0 ? (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">

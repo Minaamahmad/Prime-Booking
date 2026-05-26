@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Calendar, Images, MapPin, User } from 'lucide-react';
 import { hotelService, roomService, bookingService } from '../services/api';
 import { useAuth } from '../context/AuthContext';
-import Loading from '../components/Loading';
+import { HotelDetailsSkeleton } from '../components/Skeletons';
 import ErrorAlert from '../components/ErrorAlert';
 import SuccessAlert from '../components/SuccessAlert';
 import Toast from '../components/Toast';
@@ -96,7 +96,7 @@ const HotelDetails = () => {
   }, [bookingDates.check_in, bookingDates.check_out]);
   const total = useMemo(() => (selectedRoom && nights ? nights * Number(selectedRoom.price_per_night || 0) : 0), [nights, selectedRoom]);
 
-  if (loading) return <Loading message="Loading hotel details..." />;
+  if (loading) return <HotelDetailsSkeleton />;
   if (!hotel) return <div className="min-h-screen bg-gray-50 py-16 text-center text-gray-600">Hotel not found.</div>;
 
   return (
