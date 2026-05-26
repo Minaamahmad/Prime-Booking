@@ -41,7 +41,7 @@ const Navbar = () => {
 
         <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-6">
           {isAuthenticated() && isAdmin() && (
-            <Link to="/admin/users" className={linkClass}>
+            <Link to="/admin/users/" className={linkClass}>
               Admin Panel
             </Link>
           )}
